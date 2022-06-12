@@ -26,8 +26,6 @@ ld = LedData(64, defaultColor=[0,0,255])
 
 s = Slider((100,100, 100, 10))
 
-def dataLoop():
-    sd.sendData(ld)
 
 def main():
 
@@ -38,22 +36,20 @@ def main():
         sd.startConnection()
 
 
-    dataThread = Thread(target=dataLoop)
+    
     
 
     w_running = True
     mouse_pressed = {'left' : False, 'right':False, 'wheel': False}
 
     
-    dataThread.start()
-    dataThread.join()
+    
 
-    while(w_running):
+    while(sd.connectionStable and w_running):
         
         mouse_clicked = {'left' : False, 'right':False, 'wheel': False}
         mouse_moved = False
         mouse_scroll = 0
-
         
 
         # unprocessed = unprocessed + (last_frame_time - current_time)
@@ -105,7 +101,7 @@ def main():
         s.show(window)
         s.update(mouse_events)
         ld.fill([int(s.get_value() * 255), int(s.get_value() * 255), int(s.get_value() * 255)])
-        dataThread.run()
+        sd.sendData(ld)
         
         pygame.display.update()
         
