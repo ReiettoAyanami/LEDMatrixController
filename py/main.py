@@ -1,3 +1,4 @@
+from ast import arg
 from random import randint, random
 
 import pygame
@@ -8,6 +9,7 @@ import serial
 from src.gui_elements.slider import Slider
 from src.LedData import LedData
 from src.SerialData import SerialData
+from threading import *
 
 #Pygame Stuff
 pygame.init()
@@ -24,6 +26,9 @@ ld = LedData(64, defaultColor=[0,0,255])
 
 s = Slider((100,100, 100, 10))
 
+def dataLoop():
+    sd.sendData(ld)
+
 def main():
 
     
@@ -31,11 +36,19 @@ def main():
     while(not sd.connectionStable):
 
         sd.startConnection()
+
+
+    dataThread = Thread(target=dataLoop)
     
+
     w_running = True
     mouse_pressed = {'left' : False, 'right':False, 'wheel': False}
 
-    while(sd.connectionStable and w_running):
+    
+    dataThread.start()
+    dataThread.join()
+
+    while(w_running):
         
         mouse_clicked = {'left' : False, 'right':False, 'wheel': False}
         mouse_moved = False
@@ -91,12 +104,13 @@ def main():
 
         s.show(window)
         s.update(mouse_events)
-
-
-        pygame.display.update()
-
         ld.fill([int(s.get_value() * 255), int(s.get_value() * 255), int(s.get_value() * 255)])
-        sd.sendData(ld)
+        dataThread.run()
+        
+        pygame.display.update()
+        
+    
+    
 
     
     
