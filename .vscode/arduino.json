@@ -1,0 +1,7 @@
+{
+    "port": "COM5",
+    "configuration": "cpu=atmega328",
+    "board": "arduino:avr:nano",
+    "programmer": "arduino:arduinoisporg",
+    "sketch": "mtrx-ino\\mtrx-ino.ino"
+}
