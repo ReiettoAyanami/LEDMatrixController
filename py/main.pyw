@@ -1,6 +1,7 @@
 from ast import arg
+from concurrent.futures import thread
 from random import randint, random
-
+import sys
 import pygame
 from re import ASCII
 import time
@@ -18,7 +19,7 @@ WINDOW_SIZE = W_WIDTH, W_HEIGHT = (1000,1000)
 window = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption('LED MATRIX')
 #clock = pygame.time.Clock()
-
+w_running = True
 #Serial stuff
 ser = serial.Serial('COM5', 9600)
 sd = SerialData(ser)
@@ -27,19 +28,27 @@ ld = LedData(64, defaultColor=[0,0,255])
 s = Slider((100,100, 100, 10))
 
 
+def sendData(connectionStable):
+
+    while connectionStable and w_running:
+        ld.fill([int(s.get_value() * 255), int(s.get_value() * 255), int(s.get_value() * 255)])
+        sd.sendData(ld)
+
+
 def main():
 
-    
+    global w_running
 
     while(not sd.connectionStable):
 
         sd.startConnection()
 
 
-    
-    
 
-    w_running = True
+    
+    
+    dataThread = Thread(target = sendData, args= [sd.connectionStable])
+    dataThread.start()
     mouse_pressed = {'left' : False, 'right':False, 'wheel': False}
 
     
@@ -65,9 +74,13 @@ def main():
 
             if event.type == pygame.QUIT:
                 w_running = False
-            
+                
+                pygame.quit()
+                sys.exit()
+                
             if event.type == pygame.MOUSEMOTION:
                 mouse_moved = True
+
             
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -100,8 +113,6 @@ def main():
 
         s.show(window)
         s.update(mouse_events)
-        ld.fill([int(s.get_value() * 255), int(s.get_value() * 255), int(s.get_value() * 255)])
-        sd.sendData(ld)
         
         pygame.display.update()
         
@@ -115,6 +126,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+    
 
 
     

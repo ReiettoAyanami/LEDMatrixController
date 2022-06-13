@@ -54,5 +54,8 @@ class SerialData:
     def sendData(self,data:LedData):
 
         for i in range(len(data)):
-            self.ser.write(stringifyLEDData(data[i]))
+            try:
+                self.ser.write(stringifyLEDData(data[i]))
+            except:
+                return
 
