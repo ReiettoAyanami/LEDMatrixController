@@ -22,6 +22,9 @@ class Button():
         gfxdraw.rectangle(surface, self.rect, self.outline_color)
 
 
+    def glow(self, surface, color:tuple or pygame.Color):
+        gfxdraw.box(surface, self.rect, color)
+
 
 
     def hover(self) -> bool:

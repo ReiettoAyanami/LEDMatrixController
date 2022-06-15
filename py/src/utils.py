@@ -15,7 +15,7 @@ def stringifyLEDData(LEDData):
 				ed +=1
 		else:
 			ed = 1
-		
+			
 		z = 3 - ed
 		
 		

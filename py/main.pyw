@@ -1,60 +1,88 @@
-from ast import arg
-from concurrent.futures import thread
-from random import randint, random
 import sys
+from matplotlib.pyplot import title
 import pygame
+from pygame import gfxdraw
 from re import ASCII
 import time
 from matplotlib.colors import hsv_to_rgb
 import serial
+from src.gui_elements.button import Button
+from src.Matrix import Matrix
 from src.gui_elements.slider import Slider
-from src.LedData import LedData
+from src.LedData import LedData, COLOR_BLACK
 from src.SerialData import SerialData
 from threading import *
+from tkinter import colorchooser
+from src.gui_elements.string_button import String_Button
+ 
 
 #Pygame Stuff
 pygame.init()
 pygame.font.init()
-WINDOW_SIZE = W_WIDTH, W_HEIGHT = (1000,1000)
+WINDOW_SIZE = W_WIDTH, W_HEIGHT = (1280,720)
 window = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption('LED MATRIX')
 #clock = pygame.time.Clock()
 w_running = True
 #Serial stuff
-ser = serial.Serial('COM5', 9600)
-sd = SerialData(ser)
-ld = LedData(64, defaultColor=[0,0,255])
 
-s = Slider((100,100, 100, 10))
+ser = serial.Serial('COM5', 9600)
+serialCom = SerialData(ser)
+leds = LedData(64, defaultColor=COLOR_BLACK)
+matrixBoard = Matrix(rect = (W_WIDTH - W_HEIGHT,0,W_HEIGHT, W_HEIGHT))
+colorButton = String_Button((10,10,500,500),"Colore")
+gColor = [0,0,0]
+
+"""
+TODO
+
+- Fare un sistema decende di GUI
+- Selezione della porta COM
+- Dump di uno sketch fatto apposta su arduino
+- Animazioni
+- Testo
+- Essenzialmente basta, penso, spero, dai, speriamo <3
+
+
+"""
+
 
 
 def sendData(connectionStable):
 
     while connectionStable and w_running:
-        ld.fill([int(s.get_value() * 255), int(s.get_value() * 255), int(s.get_value() * 255)])
-        sd.sendData(ld)
+        #leds.set_at(10, [100,100,0])
 
+        serialCom.sendData(leds)
+
+
+def colorChooseWindow() -> list:
+    c = colorchooser.askcolor(title = "Scegliere il colore: ")
+    
+    return c[0]
 
 def main():
 
     global w_running
+    global leds
+    global gColor
 
-    while(not sd.connectionStable):
+    while(not serialCom.connectionStable):
 
-        sd.startConnection()
+        serialCom.startConnection()
 
 
 
     
     
-    dataThread = Thread(target = sendData, args= [sd.connectionStable])
+    dataThread = Thread(target = sendData, args= [serialCom.connectionStable])
     dataThread.start()
     mouse_pressed = {'left' : False, 'right':False, 'wheel': False}
 
     
     
 
-    while(sd.connectionStable and w_running):
+    while(serialCom.connectionStable and w_running):
         
         mouse_clicked = {'left' : False, 'right':False, 'wheel': False}
         mouse_moved = False
@@ -106,15 +134,25 @@ def main():
 
             if event.type == pygame.MOUSEWHEEL:
                 mouse_scroll = event.y
-            
+        
+
+        gColor =  colorChooseWindow() if mouse_clicked['left'] and colorButton.hover() else gColor
+        matrixBoard.update(mouse_events, gColor)
+
+        leds = matrixBoard.toLEDData()
+        
 
         window.fill((0,0,0))
-
-
-        s.show(window)
-        s.update(mouse_events)
         
+
+        matrixBoard.show(window)
+        colorButton.show(window)
+        
+        
+
         pygame.display.update()
+
+
         
     
     
