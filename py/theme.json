@@ -1,0 +1,87 @@
+{
+    "button":{
+
+        "colours":
+            {
+
+                "normal_bg":"#FFFFFF",
+                "normal_text": "#000000",
+                "hovered_bg": "#000000",
+                "hovered_text":"#FFFFFF"
+                
+                
+            },
+        "misc":
+            {
+                "shape":"rounded_rectangle"
+            },
+
+        "font":
+            {
+                "name":"russoOne",
+                "size": 10,
+                "regular_resource":
+                    {
+                
+                        "package":"fonts.roboto",
+                        "resource":"Roboto-Light.ttf"    
+                
+                    },
+                "bold_resource":
+                    {
+
+                        "package":"fonts.roboto",
+                        "resource": "Roboto-Bold.ttf"
+
+                    }
+                
+            }
+    },
+
+
+    "horizontal_slider":
+    {
+
+
+        "misc":
+        {
+            
+            "enable_arrow_buttons": 1
+
+        }
+
+
+    },
+
+    "horizontal_slider.#left_button":
+    {
+
+        "colours":
+        
+        {
+
+            "normal_bg":"#000000"
+
+        }
+
+
+    },
+
+    "horizontal_slider.#right_button":
+    {
+
+
+
+        "colours":
+        {
+
+            "normal_bg":"#000000"
+
+        }
+
+
+    }
+
+    
+
+}

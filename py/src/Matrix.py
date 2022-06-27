@@ -2,7 +2,7 @@ from typing import Type
 import pygame
 from pygame import Rect
 from src.LedData import LedData
-from src.gui_elements.button import Button
+from src.button import Button
 
 
 class Matrix:
@@ -17,7 +17,7 @@ class Matrix:
 
         self.size = size
         self.mat = [[Button((self.x + (self.buttonW * i), self.y + (self.buttonH * j), self.buttonW, self.buttonH), color=[0,0,0]) for j in range(self.size)]for i in range(self.size)]
-
+        self.brightness = 255
 
     def show(self, surface):
 
@@ -33,7 +33,10 @@ class Matrix:
             for j in range(len(self.mat[i])):
                 self.mat[i][j].on_event(self.mat[i][j].hover() and mouseEvents['mouse_pressed']['left'],lambda: self.setColorAt(i,j,color))
                 
+    def setBrightness(self, newBrightness:list[int | float]):
 
+        self.brightness = newBrightness
+                
 
     def setColorAt(self,x:int,y:int,color:list[int]):
         
@@ -45,6 +48,13 @@ class Matrix:
 
         for i in range(len(self.mat)):
             for j in range(len(self.mat[i])):
-                ld.set_at(((j * self.size )+ i), self.mat[i][j].color)
+                ld.set_at(((j * self.size )+ i), [int((self.mat[i][j].color[k] * self.brightness) / 255) for k in range(3)])
 
         return ld
+
+    def setBorderRadius(self, border_radius):
+        self.mat[-1][0].set_corners({'topleft':0, 'topright':border_radius, 'bottomleft':0, 'bottomright':0})
+        self.mat[0][0].set_corners({'topleft':border_radius, 'topright':0, 'bottomleft':0, 'bottomright':0})
+        self.mat[0][-1].set_corners({'topleft':0, 'topright':0, 'bottomleft':border_radius, 'bottomright':0})
+        self.mat[-1][-1].set_corners({'topleft':0, 'topright':0, 'bottomleft':0, 'bottomright':border_radius})
+
