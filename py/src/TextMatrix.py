@@ -34,15 +34,6 @@ class TextMatrix(Matrix):
         
         self.matrix_text = self.__textToMatrix(self.text)
         self.bg_mat = [[Button((self.x + (self.buttonW * i), self.y + (self.buttonH * j), self.buttonW, self.buttonH), color=[0,0,0]) for j in range(self.size)]for i in range(self.size)]
-
-       
-
-        with open('sus.txt', 'w') as t:
-            for i in range(len(self.matrix_text)):
-                for j in range(len(self.matrix_text[i])):
-                    t.write(str(self.matrix_text[i][j]))
-                t.write('\n')
-
         self.scroll_counter = 0
         self.scroll = 0
     
