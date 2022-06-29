@@ -8,42 +8,39 @@ EMOJI_REP = u'\ufffd'
 
 class TextMatrix(Matrix):
 
-    def __init__(self,pos:tuple = (0,0),buttonSize:tuple = (1,1),rect:pygame.Rect = None, size = 8, text:str = "Hello World!", font_path:str = "py\\fonts\\MatrixFonts\\8_bit_font.json") -> None:
+
+
+
+    def __init__(self,pos:tuple = (0,0),buttonSize:tuple = (1,1),rect:pygame.Rect = None, size = 8, text:str = "Hello World!", fontPath:str = "py\\fonts\\MatrixFonts\\8_bit_font.json") -> None:
         super().__init__(pos, buttonSize, rect, size)
-        
         self.emojis = []
-
-        
-
-
-        with open(font_path, 'r') as j:
+        with open(fontPath, 'r') as j:
             self.font:dict = json.load(j)
         self.text = self.__parseText(text)
         
-        self.matrix_text = self.__textToMatrix(self.text)
+        self.matrixText = self.__textToMatrix(self.text)
         self.bgMat = [[Button((self.x + (self.buttonW * i), self.y + (self.buttonH * j), self.buttonW, self.buttonH), color=[0,0,0]) for j in range(self.size)]for i in range(self.size)]
-        self.scroll_counter = 0
+        self.scrollCounter = 0
         self.scroll = 0
     
     def show(self,surface:pygame.Surface):
-
         super().show(surface)
 
 
     def __parseText(self, txt:str) -> str:
         txt = txt.upper()
         allowed = self.font.keys()
-        emoji_allowed = list(self.font['emojis'].keys())
+        emojiAllowed = list(self.font['emojis'].keys())
         
         ntxt = ''
 
-        for i in range(len(emoji_allowed)):
+        for i in range(len(emojiAllowed)):
             
-            if txt.find(emoji_allowed[i]) >= 0:
-                for j in range(txt.count(emoji_allowed[i])):
-                    self.emojis.append(emoji_allowed[i])
+            if txt.find(emojiAllowed[i]) >= 0:
+                for j in range(txt.count(emojiAllowed[i])):
+                    self.emojis.append(emojiAllowed[i])
                     
-                txt = txt.replace(emoji_allowed[i], EMOJI_REP)
+                txt = txt.replace(emojiAllowed[i], EMOJI_REP)
 
 
 
@@ -56,9 +53,9 @@ class TextMatrix(Matrix):
 
 
     
-    def __textToMatrix(self, txt:str, letter_spacing:int = 1) -> list:
+    def __textToMatrix(self, txt:str, letterSpacing:int = 1) -> list:
 
-        matrix_text = [[0 for _ in range( len(txt) * len(self.font['A']) + (len(self.emojis) * len(self.font['emojis']["*SUS*"])) +  (letter_spacing * len(txt)))] for _ in range(len(self.font['A']))]
+        matrixText = [[0 for _ in range( len(txt) * len(self.font['A']) + (len(self.emojis) * len(self.font['emojis']["*SUS*"])) +  (letterSpacing * len(txt)))] for _ in range(len(self.font['A']))]
         emojiCounter = 0
         
         for k in range(len(txt)):
@@ -66,7 +63,6 @@ class TextMatrix(Matrix):
             if txt[k] != EMOJI_REP:
                 matChar = self.font[txt[k]]
             else:
-                print(self.emojis, emojiCounter)
                 matChar = self.font['emojis'][self.emojis[emojiCounter]]
 
 
@@ -74,10 +70,10 @@ class TextMatrix(Matrix):
                 for j in range(len(matChar[i])):
                     
                     x = j
-                    y =  (k * len(matChar) + i) + (letter_spacing * k)
+                    y =  (k * len(matChar) + i) + (letterSpacing * k)
                     
                     
-                    matrix_text[x][y] = matChar[i][j]
+                    matrixText[x][y] = matChar[i][j]
 
 
                     
@@ -89,7 +85,7 @@ class TextMatrix(Matrix):
                         
 
                 
-        return matrix_text
+        return matrixText
     
 
 
@@ -99,19 +95,19 @@ class TextMatrix(Matrix):
         for i in range(len(self.mat)):
             for j in range(len(self.mat[i])):
                 
-                if self.matrix_text[j][(i + self.scroll) % (len(self.matrix_text[0] ))]:
+                if self.matrixText[j][(i + self.scroll) % (len(self.matrixText[0] ))]:
                     self.nextFrame[i][j].color = newColor
                 else:
                     self.nextFrame[i][j].color = self.bgMat[i][j].color
 
         if scroll:
-            self.scroll_counter += scrollSpeed
+            self.scrollCounter += scrollSpeed
 
-            if self.scroll_counter >= 1:
+            if self.scrollCounter >= 1:
                 self.scroll += 1
-                self.scroll_counter = 0
+                self.scrollCounter = 0
 
-    def bgUpdate(self, mouseEvents, color = [100,100, 100]):
+    def bgMouseUpdate(self, mouseEvents, color = [100,100, 100]):
 
         for i in range(len(self.mat)):
             for j in range(len(self.mat[i])):

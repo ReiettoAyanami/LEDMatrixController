@@ -8,23 +8,70 @@ COLOR_BLUE = [0,0,255]
 class DataBuffer:
 
 
+    """
+    ### DataBuffer
+
+    A class which contains a buffer of colors that has to be sent to the Arduino.
+
+    #### Attributes:
+    - `buffer`: (list) the buffer itself
+
+    #### Args:
+    - `startBuff`: a list containg dictionaries containing an 'idx' and a 'color' property.
+
+
+    """
+
+    
     def __init__(self, startBuff:list[dict]) -> None:
         
-
         self.buffer = []
         for d in startBuff:
             self.buffer.append([d['idx'], d['color'][0], d['color'][1], d['color'][2]])
     
     
-    def addData(self,newData:list[dict]):
-            for d in newData:
-                self.buffer.append([d['idx'], d['color'][0], d['color'][1], d['color'][2]])
+    def addData(self,newData:list[dict]) -> None:
+        
+        """
+        Adds data to the buffer.
 
+        #### Args:
+        - `newData`: a list of dictionaries formatted exactly like the buffer for initialize the class.
+                
+        """
+
+        for d in newData:
+            self.buffer.append([d['idx'], d['color'][0], d['color'][1], d['color'][2]])
 
     def clear(self):
+
+        """
+        Clears the buffer.
+
+        """
+                
         self.buffer = []
 
     def toEncodedStringAt(self,idx:int) -> str:
+
+        """
+        Encodes a buffer's element at a given index in the following format:
+
+        '.iiirrrgggbbb\\n'
+
+        . -> start reading data;
+        iii -> index: 001;
+        rrr -> red color: 020;
+        ggg -> green color: 100;
+        bbb -> blue color: 069;
+        \\n -> stop reading data.
+
+        #### Args:
+        - `idx` : the index of the element you want to encode.
+
+        """
+
+
         s = "."
 
         for i in range(len(self.buffer[idx])):

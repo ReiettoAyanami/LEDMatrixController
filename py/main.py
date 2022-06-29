@@ -9,6 +9,10 @@ from tkinter import colorchooser
 from pygame_gui.core import ObjectID
 from src.TextMatrix import TextMatrix
 
+MAX_BUFFER_SIZE = 64
+
+
+
 pygame.init()
 pygame.font.init()
 WINDOW_SIZE = W_WIDTH, W_HEIGHT = (1280,720)
@@ -20,6 +24,7 @@ clock = pygame.time.Clock()
 
 ser = serial.Serial('com5', 9600)
 serialCom = SerialData(ser)
+
 
 matrixBoard = TextMatrix(rect = (W_WIDTH - W_HEIGHT,0,W_HEIGHT, W_HEIGHT))
 matrixBoard.setBorderRadius(20)
@@ -135,17 +140,16 @@ def main():
         matrixBoard.setBrightness(int(brightnessSlider.current_value))
         
         if serialCom.inConnectionStable:
-            matrixBoard.bgUpdate(mouse_events, gColor)
-
+            matrixBoard.bgMouseUpdate(mouse_events, gColor)
+            
             
 
-            if len(serialCom.dataBuffer.buffer) < 100:
-
-                matrixBoard.displayText(True,1,(20,20,20))
+            if len(serialCom.dataBuffer.buffer) <  MAX_BUFFER_SIZE:
+                matrixBoard.displayText(True,.1,(200,100,14))
                 changes = matrixBoard.getMatrixChanges()
                 serialCom.dataBuffer.addData(changes)
 
-            
+        
         
 
 
