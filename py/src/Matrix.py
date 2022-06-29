@@ -1,7 +1,5 @@
-from typing import Type
 import pygame
 from pygame import Rect
-from src.LedData import LedData
 from src.button import Button
 
 
@@ -15,7 +13,10 @@ class Matrix:
             self.pos = self.x, self.y = Rect(rect).topleft
             self.buttonSize = self.buttonW, self.buttonH = Rect(rect).w/size, Rect(rect).h/size
 
+
         self.size = size
+        
+        self.nextFrame = [[Button((self.x + (self.buttonW * i), self.y + (self.buttonH * j), self.buttonW, self.buttonH), color=[0,0,0]) for j in range(self.size)]for i in range(self.size)]
         self.mat = [[Button((self.x + (self.buttonW * i), self.y + (self.buttonH * j), self.buttonW, self.buttonH), color=[0,0,0]) for j in range(self.size)]for i in range(self.size)]
         self.brightness = 255
 
@@ -36,21 +37,27 @@ class Matrix:
     def setBrightness(self, newBrightness:list[int | float]):
 
         self.brightness = newBrightness
-                
+        
+    
 
     def setColorAt(self,x:int,y:int,color:list[int]):
         
         self.mat[x][y].color = color
 
-    def toLEDData(self) -> LedData:
+
+    def getMatrixChanges(self):
         
-        ld = LedData(self.size * self.size)
+        changed = []
 
         for i in range(len(self.mat)):
             for j in range(len(self.mat[i])):
-                ld.set_at(((j * self.size )+ i), [int((self.mat[i][j].color[k] * self.brightness) / 255) for k in range(3)])
 
-        return ld
+                if self.mat[i][j].color != self.nextFrame[i][j].color:
+                    self.mat[i][j].color = self.nextFrame[i][j].color
+                    changed.append({"idx":((j * self.size )+ i),"color": self.mat[i][j].color})
+                    
+
+        return changed
 
     def setBorderRadius(self, border_radius):
         self.mat[-1][0].set_corners({'topleft':0, 'topright':border_radius, 'bottomleft':0, 'bottomright':0})

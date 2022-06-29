@@ -1,6 +1,5 @@
-import serial,src.utils
-from src.utils import stringifyLEDData
-from src.LedData import LedData
+import serial
+from src.DataBuffer import DataBuffer
 from threading import Thread
 
 
@@ -8,7 +7,7 @@ from threading import Thread
 class SerialData:
 
 
-    def __init__(self, ser:serial.Serial, comData = "17\n", inMinData = 50, ledDataSize = 64) -> None:
+    def __init__(self, ser:serial.Serial, comData = "17\n", inMinData = 50) -> None:
         
         self.ser = ser
         self.comData = comData
@@ -29,9 +28,13 @@ class SerialData:
         
         self.connectionStable = False
 
-        self.ledData = LedData(ledDataSize)
+        self.dataBuffer = DataBuffer([])
+
         self.w_running = False
         self.execute = Thread(target=self.communicate)
+        self.isBusy = False
+
+
 
 
     def startConnection(self):
@@ -61,13 +64,12 @@ class SerialData:
             self.connectionStable = True
 
 
-    def sendData(self,data:LedData):
+    
+    def sendData(self):
 
-        for i in range(len(data)):
-            try:
-                self.ser.write(stringifyLEDData(data[i]))
-            except:
-                return
+        if self.dataBuffer.buffer:
+            self.ser.write(self.dataBuffer.toEncodedStringAt(0))
+            self.dataBuffer.buffer.pop(0)
 
     
     def communicate(self):
@@ -76,7 +78,9 @@ class SerialData:
             self.startConnection()
 
         while self.connectionStable and self.w_running:
-            self.sendData(self.ledData)
+
+            self.sendData()
+            
 
 
     

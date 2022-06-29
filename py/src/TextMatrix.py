@@ -1,22 +1,10 @@
-from csv import DictWriter
-from multiprocessing.managers import ListProxy
-from random import random
-from re import L
-from attr import s
-from matplotlib.ft2font import HORIZONTAL
-from matplotlib.pyplot import text
 from src.button import Button
-from numpy import character, mat, matrix
 from src.Matrix import Matrix
 import pygame
-from pygame import Rect
+
 import json
 
 EMOJI_REP = u'\ufffd'
-
-
-
-
 
 class TextMatrix(Matrix):
 
@@ -33,17 +21,13 @@ class TextMatrix(Matrix):
         self.text = self.__parseText(text)
         
         self.matrix_text = self.__textToMatrix(self.text)
-        self.bg_mat = [[Button((self.x + (self.buttonW * i), self.y + (self.buttonH * j), self.buttonW, self.buttonH), color=[0,0,0]) for j in range(self.size)]for i in range(self.size)]
+        self.bgMat = [[Button((self.x + (self.buttonW * i), self.y + (self.buttonH * j), self.buttonW, self.buttonH), color=[0,0,0]) for j in range(self.size)]for i in range(self.size)]
         self.scroll_counter = 0
         self.scroll = 0
     
-    def show(self,surface:pygame.Surface, show_text:bool = False, scroll:bool = False,scrollSpeed:float = .1, newColor:tuple = (255,255,255)):
+    def show(self,surface:pygame.Surface):
 
         super().show(surface)
-
-        if show_text:
-            self.displayText(scroll, scrollSpeed, newColor)
-
 
 
     def __parseText(self, txt:str) -> str:
@@ -58,7 +42,7 @@ class TextMatrix(Matrix):
             if txt.find(emoji_allowed[i]) >= 0:
                 for j in range(txt.count(emoji_allowed[i])):
                     self.emojis.append(emoji_allowed[i])
-                    print(emoji_allowed[i])
+                    
                 txt = txt.replace(emoji_allowed[i], EMOJI_REP)
 
 
@@ -82,6 +66,7 @@ class TextMatrix(Matrix):
             if txt[k] != EMOJI_REP:
                 matChar = self.font[txt[k]]
             else:
+                print(self.emojis, emojiCounter)
                 matChar = self.font['emojis'][self.emojis[emojiCounter]]
 
 
@@ -97,10 +82,10 @@ class TextMatrix(Matrix):
 
                     
 
-                    if txt[k] == EMOJI_REP:
-                        
-                        emojiCounter += 1 
-                        
+            if txt[k] == EMOJI_REP:
+                
+                emojiCounter += 1 
+                
                         
 
                 
@@ -114,11 +99,10 @@ class TextMatrix(Matrix):
         for i in range(len(self.mat)):
             for j in range(len(self.mat[i])):
                 
-                
-                self.mat[i][j].color = newColor if self.matrix_text[j][(i + self.scroll) % (len(self.matrix_text[0] ))] else self.bg_mat[i][j].color
-        
-
-        
+                if self.matrix_text[j][(i + self.scroll) % (len(self.matrix_text[0] ))]:
+                    self.nextFrame[i][j].color = newColor
+                else:
+                    self.nextFrame[i][j].color = self.bgMat[i][j].color
 
         if scroll:
             self.scroll_counter += scrollSpeed
@@ -131,8 +115,12 @@ class TextMatrix(Matrix):
 
         for i in range(len(self.mat)):
             for j in range(len(self.mat[i])):
-                self.bg_mat[i][j].on_event(self.bg_mat[i][j].hover() and mouseEvents['mouse_pressed']['left'],lambda: self.setBgColorAt(i,j,color))
+                self.bgMat[i][j].on_event(self.bgMat[i][j].hover() and mouseEvents['mouse_pressed']['left'],lambda: self.setBgColorAt(i,j,color))
+
+
+
+
 
     def setBgColorAt(self,x:int,y:int,color:list[int]):
         
-        self.bg_mat[x][y].color = color
+        self.bgMat[x][y].color = color

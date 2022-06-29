@@ -6,7 +6,7 @@
 #define POWER_UP_DELAY 3000
 #define DIN 5
 #define N_LED 64
-#define BRIGHTNESS 1
+#define BRIGHTNESS 255
 #define LED_TYPE WS2811
 #define COLOR_ORDER GRB
 #define UPDATES_PER_SECOND 100
@@ -20,7 +20,6 @@ MatrixHandler matrix(leds, N_LED);
 void setup() {
 
   delay(POWER_UP_DELAY);
-  pinMode(13, OUTPUT);
   FastLED.addLeds<LED_TYPE, DIN, COLOR_ORDER>(matrix.getLeds(), N_LED).setCorrection(TypicalLEDStrip);
   Serial.begin(9600);
   matrix.clear();
