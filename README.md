@@ -15,14 +15,19 @@ Pygame Version: 2.1.0
 ## What i'm using:
 
 - ELEGOO NANO
+
 - CJMCU 8*8 LED Matrix
+
 - Random breadboard
 
 
 
 ## TODO
 
+<<<<<<< HEAD
 - [ ] Finishing docs
+=======
+>>>>>>> 39ec04f6988f325897f9cb850735be74398e4304
 - [ ] Animations
 - [ ] COM Port selection
 - [ ] Better GUI System
