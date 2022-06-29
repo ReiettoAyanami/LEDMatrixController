@@ -24,10 +24,7 @@ Pygame Version: 2.1.0
 
 ## TODO
 
-<<<<<<< HEAD
 - [ ] Finishing docs
-=======
->>>>>>> 39ec04f6988f325897f9cb850735be74398e4304
 - [ ] Animations
 - [ ] COM Port selection
 - [ ] Better GUI System
