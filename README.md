@@ -2,6 +2,10 @@
 
 A simple application built in python to control an 8*8 LED matrix.
 
+## Documentation:
+https://reiettoayanami.github.io/MatrixDocs/
+
+
 ## Specs:
 
 LED Type:   WS2811
@@ -35,4 +39,5 @@ Pygame Version: 2.1.0
 
 ## Special thanks
 - @MassimoSandre[https://www.github.com/MassimoSandre] suggestion about data transfer, and general help in adding text.
+
 
