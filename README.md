@@ -14,7 +14,7 @@ Pygame Version: 2.1.0
 
 ## What i'm using:
 
-- ELEGOO NANO
+- ELEGOO NANO (Arduino nano equivalent)
 
 - CJMCU 8*8 LED Matrix
 
@@ -24,9 +24,9 @@ Pygame Version: 2.1.0
 
 ## TODO
 
-- [ ] Finishing docs
+- [x] Finishing docs
 - [ ] Animations
-- [ ] COM Port selection
+- [x] COM Port detection
 - [ ] Better GUI System
 - [ ] Some refactoring -> expandability 
 - [ ] Fixing frame speed(Synchronizing Arduino & Python)
@@ -34,5 +34,5 @@ Pygame Version: 2.1.0
 - [ ] Removing Herobrine
 
 ## Special thanks
-- @MassimoSandre suggestion about data transfer, and general help in adding text.
+- @MassimoSandre[https://www.github.com/MassimoSandre] suggestion about data transfer, and general help in adding text.
 
