@@ -24,7 +24,7 @@ class SerialData:
     - `inData`: (`str`) data coming from the arduino.
     - `dataBuffer`: (`DataBuffer`) buffer of pixel to send to the arduino after the connection is stable.
     - `windowRunning`: (`bool`) if the pygame window is running.
-    - `execute`: (`Thread`) a thread to continuosly send data to the arduino without interfering with the pygame window.
+    - `executor`: (`Thread`) a thread to continuosly send data to the arduino without interfering with the pygame window.
     - 
     
     ### Args
@@ -59,7 +59,7 @@ class SerialData:
         self.dataBuffer = DataBuffer([])
 
         self.windowRunning = False
-        self.execute = Thread(target=self.communicate)
+        self.executor = Thread(target=self.communicate)
 
 
 

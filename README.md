@@ -24,9 +24,9 @@ Pygame Version: 2.1.0
 
 ## TODO
 
-- [ ] Finishing docs
+- [x] Finishing docs
 - [ ] Animations
-- [ ] COM Port selection
+- [x] COM Port detection
 - [ ] Better GUI System
 - [ ] Some refactoring -> expandability 
 - [ ] Fixing frame speed(Synchronizing Arduino & Python)

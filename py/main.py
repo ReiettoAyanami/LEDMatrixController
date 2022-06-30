@@ -1,5 +1,4 @@
-from pickletools import pyfloat
-import pydoc
+import json
 import pygame
 from pygame import Rect
 import pygame_gui
@@ -10,32 +9,55 @@ from threading import *
 from tkinter import colorchooser
 from pygame_gui.core import ObjectID
 from src.TextMatrix import TextMatrix
+import serial.tools.list_ports
 
+constants = {}
 
+with open('py/constants.json', 'r') as j:
+    
+    constants = json.load(j)
 
-MAX_BUFFER_SIZE = 64
+MAX_BUFFER_SIZE = constants['MAX_BUFFER_SIZE']
+ARDUINO_NAME = constants['ARDUINO_NAME']
 
 
 
 pygame.init()
 pygame.font.init()
-WINDOW_SIZE = W_WIDTH, W_HEIGHT = (1280,720)
+WINDOW_SIZE = W_WIDTH, W_HEIGHT = constants["WINDOW_SIZE"]
 window = pygame.display.set_mode(WINDOW_SIZE)
-pygame.display.set_caption('LED MATRIX')
+pygame.display.set_caption(constants['CAPTION'])
 w_running = True
 manager = pygame_gui.UIManager(WINDOW_SIZE, theme_path='py/theme.json')
 clock = pygame.time.Clock()
 
-ser = serial.Serial('com5', 9600)
+availableComs = serial.tools.list_ports.comports()
+arduinoPort = ''
+
+for com in availableComs:
+
+    if com.description.find(ARDUINO_NAME) > -1:
+        arduinoPort = com.name
+
+if arduinoPort == '':
+    raise Exception('No arduino connected to com ports.')
+
+    
+
+
+
+ser = serial.Serial(arduinoPort, 9600)
 serialCom = SerialData(ser)
 
 
-matrixBoard = TextMatrix(rect = (W_WIDTH - W_HEIGHT,0,W_HEIGHT, W_HEIGHT), text='Buone Vacanze *amogus* ')
+
+matrixBoard = TextMatrix(rect = (W_WIDTH - W_HEIGHT,0,W_HEIGHT, W_HEIGHT), text='*amogus* ')
 matrixBoard.setBorderRadius(20)
 colorButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(0,0,100,20), text="Colore", manager=manager, tool_tip_text="<b>Scelta del colore</b><br>Farà apparire una finestrà che permetterà la scelta del colore con cui disegnare sulla matrice.") 
 eraserButton = pygame_gui.elements.UIButton(relative_rect=Rect(0,20,100,20),text="Gomma", manager=manager, tool_tip_text="<b>Gomma</b><br>Permette di far diventare il pennello nero per far spegnere il led.")
 brightnessSlider = pygame_gui.elements.UIHorizontalSlider(pygame.Rect(100,0,200,20), 255, [0, 255], manager, object_id=ObjectID(class_id='@brightness',object_id='#brightness'))
-
+textChoose =  pygame_gui.elements.UITextEntryLine(pygame.Rect(0,40,150,40),manager)
+#COMChoose = pygame_gui.elements.UIDropDownMenu([ availableComs[i].name for i in range( len( availableComs ) )] , 'None', pygame.Rect(300,0,100,20), manager)
 
 
 """
@@ -44,11 +66,11 @@ TODO
 
 - Fare un sistema decende di GUI -> in pausa
 - Animazioni
-- Selezione della porta COM
 - Essenzialmente basta, penso, spero, dai, speriamo <3
 
 Fatto: 
 - Testo
+- Porta COM
 
 
 """
@@ -59,11 +81,14 @@ def colorChooseWindow() -> list:
 
 def main():
 
+    global ser
     w_running = serialCom.windowRunning = True
     gColor = [0,0,0]
-    serialCom.execute.start()
     mouse_pressed = {'left' : False, 'right':False, 'wheel': False}
 
+
+    serialCom.executor.start()
+    
     while(w_running):
         
         mouse_clicked = {'left' : False, 'right':False, 'wheel': False}
@@ -79,6 +104,7 @@ def main():
             'mouse_scroll': mouse_scroll
         }
 
+        
 
         for event in pygame.event.get():
 
@@ -128,8 +154,13 @@ def main():
                 if event.ui_element == eraserButton:
                     gColor = [0,0,0]
 
+            if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
+                if event.ui_element == textChoose:
+                    matrixBoard.setText(" " + event.text)
+                    
 
-            
+
+
 
             manager.process_events(event)
 
@@ -138,7 +169,7 @@ def main():
         manager.update(time_delta)
         matrixBoard.setBrightness(int(brightnessSlider.current_value))
         
-        if serialCom.inConnectionStable:
+        if serialCom.connectionStable:
             matrixBoard.bgMouseUpdate(mouse_events, gColor)
             
             
