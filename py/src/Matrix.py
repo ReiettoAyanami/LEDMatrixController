@@ -12,12 +12,14 @@ class Matrix:
 
     #### Attributes:
 
-    - `pos`: (tuple) the top left corner of the matrix.
-    - `buttonSize`: (tuple) the size of the buttons.
-    - `size`: (int) the size in pixels of the matrix.
-    - `mat`: (list[list[Button]]) a list containing buttons that represents every pixel in the physical matrix.
-    - `brightness`: (int) the brightness that has to be sent to the physical matrix.
-    - `changed`: (list[dict]) the pixel changed from the last frame sent to the arduino.
+    - `pos`: (`tuple`) the top left corner of the matrix.
+    - `buttonSize`: (`tuple`) the size of the buttons.
+    - `size`: (`int`) the size in pixels of the matrix.
+    - `mat`: (`list[list[Button]]`) a list containing buttons that represents every pixel in the physical matrix.
+    - `brightness`: (`int`) the brightness that has to be sent to the physical matrix.
+    - `changed`: (`list[dict]`) the pixel changed from the last frame sent to the arduino.
+    - `nextFrame`: (`list[list[Button]]`) a matrix containing the next frame that will be displayed and then swapped if different from the current frame contained in `mat`.
+
 
     #### Args:
 
@@ -110,6 +112,10 @@ class Matrix:
         
         """
         Keeps track of the buttons changed on the matrix and changes them.
+
+
+        Dict is formatted in this way:
+        - {'idx': (`int`), 'color':`list[int]`)}
         """
 
 

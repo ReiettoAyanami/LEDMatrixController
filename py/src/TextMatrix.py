@@ -1,21 +1,67 @@
 from src.button import Button
 from src.Matrix import Matrix
 import pygame
-
 import json
 
 EMOJI_REP = u'\ufffd'
 
 class TextMatrix(Matrix):
+    
+    """
+    ### TextMatrix
+
+    A type of `Matrix` which is used to display text, it can also display images behind said text.
+
+    #### Attributes:
+
+    - `pos`: (`tuple`) the top left corner of the matrix.
+    - `buttonSize`: (`tuple`) the size of the buttons.
+    - `size`: (`int`) the size in pixels of the matrix.
+    - `mat`: (`list[list[Button]]`) a list containing buttons that represents every pixel in the physical matrix.
+    - `brightness`: (`int`) the brightness that has to be sent to the physical matrix.
+    - `changed`: (`list[dict]`) the pixel changed from the last frame sent to the arduino.
+    - `font`: (`dict`) a dictionary containing the alphabet + some character like '/', '\\', '?", [...] and also some self-made emojis in the 'emoji'dict.
+    - `emojis`: (`list[str]`) a list of special characters that are not representable with an unicode character.
+    - `text`: (`str`) a parsed string containing only the characters in the set provided in `font`.
+    - `matrixText`: (`list[list[int]]`) a list representation of the parsed text.
+    - `nextFrame`: (`list[list[Button]]`) a matrix containing the next frame that will be displayed and then swapped if different from the current frame contained in `mat`.
+    - `bgMat`: (`list[list[Button]]`) a matrix used to represent the background of the image, which will not affect the text.
+    - `scrollCounter`:  (`int`) a variable that increments every frame, once it reaches 1, the `scroll` variable will get updated
+    - `scroll`: (`int`) represents how much the text has been shifted.
+
+    #### Args:
+
+    - `pos`: the top left corner of the matrix.
+    - `buttonSize`: the size of the buttons.
+    - `rect`: the general dimensions of the matrix, if assigned, pos and buttonSize will be ignored and the respective attributes will be calculated based on the rect's attributes.
+    - `size`: the size in pixels of the matrix.
+    - `text`: the text that will be rendered on the matrix.
+    - `fontPath`: the path where the font for the matrix is stored.
+
+    #### Usable emoji list:
+
+    - `*sus*`: a face that shows perplexity over something.
+    - `*amogus*`: a pixelated version of the amongus character.
+    - `*dead*`: a skeleton.
+    - `*cat*`: a cat.
+    - `*:)*` the classic smiley face.
+    - `*>:(*` the classic not-so-smiley face.
+    - `*:(*` me writing docs, also some people can recognise this as a sad face.
+    - `*^_^*` very happy face.
+    - `*-_-*` bored face.
+    - `*<3*` a little heart.
+    
+    """
 
 
 
-
-    def __init__(self,pos:tuple = (0,0),buttonSize:tuple = (1,1),rect:pygame.Rect = None, size = 8, text:str = "Hello World!", fontPath:str = "py\\fonts\\MatrixFonts\\8_bit_font.json") -> None:
+    def __init__(self,pos:tuple = (0,0),buttonSize:tuple = (1,1),rect:pygame.Rect = None, size:int = 8, text:str = "Hello World!", fontPath:str = "py\\fonts\\MatrixFonts\\8_bit_font.json") -> None:
         super().__init__(pos, buttonSize, rect, size)
+        
         self.emojis = []
         with open(fontPath, 'r') as j:
             self.font:dict = json.load(j)
+
         self.text = self.__parseText(text)
         
         self.matrixText = self.__textToMatrix(self.text)
@@ -23,11 +69,19 @@ class TextMatrix(Matrix):
         self.scrollCounter = 0
         self.scroll = 0
     
-    def show(self,surface:pygame.Surface):
-        super().show(surface)
+    
 
 
     def __parseText(self, txt:str) -> str:
+
+        """
+        Parses a given string containing only characters that are in `font`.
+
+        #### Args:
+        - `txt`: the string that has to be parsed. 
+        
+        """
+
         txt = txt.upper()
         allowed = self.font.keys()
         emojiAllowed = list(self.font['emojis'].keys())
@@ -53,7 +107,17 @@ class TextMatrix(Matrix):
 
 
     
-    def __textToMatrix(self, txt:str, letterSpacing:int = 1) -> list:
+    def __textToMatrix(self, txt:str, letterSpacing:int = 1) -> list[list[int]]:
+        
+        """
+        Transforms a parsed string into text, taking also in account letter spacing.
+
+        #### Args:
+        - `txt`: parsed string.
+        - `letterSpacing`: the amount of space from one letter to another.
+        
+        """
+        
 
         matrixText = [[0 for _ in range( len(txt) * len(self.font['A']) + (len(self.emojis) * len(self.font['emojis']["*SUS*"])) +  (letterSpacing * len(txt)))] for _ in range(len(self.font['A']))]
         emojiCounter = 0
@@ -89,8 +153,17 @@ class TextMatrix(Matrix):
     
 
 
-    def displayText(self,scroll:bool = True, scrollSpeed:float = .1, newColor:tuple = (255, 255, 255)):
+    def displayText(self,canScroll:bool = True, scrollSpeed:float = .1, newColor:tuple = (255, 255, 255)) -> None:
+
+        """
+        Displays the text based on the arguments passed.
+
+        #### Args:
+        - `canScroll`: determines if the text will scroll.
+        - `scrollSpeed`: the speed at which the text will scroll.
+        - `newColor`: the color which the text will render with.
         
+        """
         
         for i in range(len(self.mat)):
             for j in range(len(self.mat[i])):
@@ -100,15 +173,25 @@ class TextMatrix(Matrix):
                 else:
                     self.nextFrame[i][j].color = self.bgMat[i][j].color
 
-        if scroll:
+        if canScroll:
             self.scrollCounter += scrollSpeed
 
             if self.scrollCounter >= 1:
                 self.scroll += 1
                 self.scrollCounter = 0
 
-    def bgMouseUpdate(self, mouseEvents, color = [100,100, 100]):
 
+    def bgMouseUpdate(self, mouseEvents:dict, color:list = [100,100, 100]) -> None:
+
+
+        """
+        Updates the background matrix.
+
+        #### Args:
+        - `mouseEvents`: a dictionary containing every mouse event.
+        - `color`: the color that the button will be changed to.
+        
+        """
         for i in range(len(self.mat)):
             for j in range(len(self.mat[i])):
                 self.bgMat[i][j].on_event(self.bgMat[i][j].hover() and mouseEvents['mouse_pressed']['left'],lambda: self.setBgColorAt(i,j,color))
@@ -119,4 +202,14 @@ class TextMatrix(Matrix):
 
     def setBgColorAt(self,x:int,y:int,color:list[int]):
         
+        """
+        Updates the button color at a given position on the background matrix.
+
+        #### Args:
+        - `x`: the x position on the background matrix.
+        - `y`: the y position on the background matrix.
+        - `color`: the color that will replace the old one.
+
+        """
+
         self.bgMat[x][y].color = color

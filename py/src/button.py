@@ -11,12 +11,12 @@ class Button():
     A clickable object.
 
     #### Attributes:
-        - `rect`: (pygame.Rect)
-        - `color`: (tuple | list)
-        - `outline_color`: (tuple | list)
-        - `outline_thickness`: (int )
-        - `can_be_clicked`: (bool)
-        - `corners`: (dict)
+        - `rect`: (`pygame.Rect`)
+        - `color`: (`tuple` | `list`)
+        - `outline_color`: (`tuple` | `list`)
+        - `outline_thickness`: (`int` )
+        - `can_be_clicked`: (`bool`)
+        - `corners`: (`dict`)
  
     """
 

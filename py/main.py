@@ -1,3 +1,5 @@
+from pickletools import pyfloat
+import pydoc
 import pygame
 from pygame import Rect
 import pygame_gui
@@ -8,6 +10,8 @@ from threading import *
 from tkinter import colorchooser
 from pygame_gui.core import ObjectID
 from src.TextMatrix import TextMatrix
+
+
 
 MAX_BUFFER_SIZE = 64
 
@@ -26,7 +30,7 @@ ser = serial.Serial('com5', 9600)
 serialCom = SerialData(ser)
 
 
-matrixBoard = TextMatrix(rect = (W_WIDTH - W_HEIGHT,0,W_HEIGHT, W_HEIGHT))
+matrixBoard = TextMatrix(rect = (W_WIDTH - W_HEIGHT,0,W_HEIGHT, W_HEIGHT), text='Buone Vacanze *amogus* ')
 matrixBoard.setBorderRadius(20)
 colorButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(0,0,100,20), text="Colore", manager=manager, tool_tip_text="<b>Scelta del colore</b><br>Farà apparire una finestrà che permetterà la scelta del colore con cui disegnare sulla matrice.") 
 eraserButton = pygame_gui.elements.UIButton(relative_rect=Rect(0,20,100,20),text="Gomma", manager=manager, tool_tip_text="<b>Gomma</b><br>Permette di far diventare il pennello nero per far spegnere il led.")
@@ -36,11 +40,6 @@ brightnessSlider = pygame_gui.elements.UIHorizontalSlider(pygame.Rect(100,0,200,
 
 """
 TODO
-
-IN CORSO -> - Trasferire solo la parte di matrice che cambia -> Suggested by Massimo Sandretti (https://github.com/MassimoSandre):
-                - Testo non funziona(?)
-
-
 
 
 - Fare un sistema decende di GUI -> in pausa
@@ -60,7 +59,7 @@ def colorChooseWindow() -> list:
 
 def main():
 
-    w_running = serialCom.w_running = True
+    w_running = serialCom.windowRunning = True
     gColor = [0,0,0]
     serialCom.execute.start()
     mouse_pressed = {'left' : False, 'right':False, 'wheel': False}
@@ -86,7 +85,7 @@ def main():
             if event.type == pygame.QUIT:
                 w_running = False
                 serialCom.connectionStable = False
-                serialCom.w_running = False
+                serialCom.windowRunning = False
                 pygame.quit()
                 sys.exit()
                 
@@ -145,17 +144,12 @@ def main():
             
 
             if len(serialCom.dataBuffer.buffer) <  MAX_BUFFER_SIZE:
-                matrixBoard.displayText(True,.1,(200,100,14))
+                matrixBoard.displayText(True,.1,(100,0,120))
                 changes = matrixBoard.getMatrixChanges()
                 serialCom.dataBuffer.addData(changes)
 
         
-        
-
-
-            
-            
-        
+    
         window.fill((0,0,0))
 
         matrixBoard.show(window)

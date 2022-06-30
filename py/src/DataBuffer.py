@@ -14,7 +14,7 @@ class DataBuffer:
     A class which contains a buffer of colors that has to be sent to the Arduino.
 
     #### Attributes:
-    - `buffer`: (list) the buffer itself
+    - `buffer`: (`list`) the buffer itself
 
     #### Args:
     - `startBuff`: a list containg dictionaries containing an 'idx' and a 'color' property.
