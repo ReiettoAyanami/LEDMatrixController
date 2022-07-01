@@ -6,33 +6,33 @@ from src.button import Button
 class Matrix:
 
     """
-    ### Matrix
 
     A class used to graphically represent the led matrix connected to the arduino.
 
-    #### Attributes:
+    Attributes:
 
-    - `pos`: (`tuple`) the top left corner of the matrix.
-    - `buttonSize`: (`tuple`) the size of the buttons.
-    - `size`: (`int`) the size in pixels of the matrix.
-    - `mat`: (`list[list[Button]]`) a list containing buttons that represents every pixel in the physical matrix.
-    - `brightness`: (`int`) the brightness that has to be sent to the physical matrix.
-    - `changed`: (`list[dict]`) the pixel changed from the last frame sent to the arduino.
-    - `nextFrame`: (`list[list[Button]]`) a matrix containing the next frame that will be displayed and then swapped if different from the current frame contained in `mat`.
+        pos: (tuple) the top left corner of the matrix.
+        buttonSize: (tuple) the size of the buttons.
+        size: (int) the size in pixels of the matrix.
+        mat: (list[list[Button]]) a list containing buttons that represents every pixel in the physical matrix.
+        brightness: (int) the brightness that has to be sent to the physical matrix.
+        changed: (list[dict]) the pixel changed from the last frame sent to the arduino.
+        nextFrame: (list[list[Button]]) a matrix containing the next frame that will be displayed and then swapped if different from the current frame contained in mat.
 
-
-    #### Args:
-
-    - `pos`: the top left corner of the matrix.
-    - `buttonSize`: the size of the buttons.
-    - `rect`: the general dimensions of the matrix, if assigned, pos and buttonSize will be ignored and the respective attributes will be calculated based on the rect's attributes.
-    - `size`: the size in pixels of the matrix.
-
-    
     """
 
 
     def __init__(self,pos:tuple = (0,0),buttonSize:tuple = (1,1),rect:pygame.Rect = None, size:int = 8) -> None:
+        """
+        Args:
+
+            pos: the top left corner of the matrix.
+            buttonSize: the size of the buttons.
+            rect: the general dimensions of the matrix, if assigned, pos and buttonSize will be ignored and the respective attributes will be calculated based on the rect's attributes.
+            size: the size in pixels of the matrix.
+
+        """
+
         self.pos = self.x, self.y = pos
         self.buttonSize = self.buttonW, self.buttonH = buttonSize
 
@@ -51,8 +51,8 @@ class Matrix:
         """
         Displays the matrix on a given surface.
 
-        #### Args:
-        - `surface`: the surface you want the matrix displayed on.
+        Args:
+            surface: the surface you want the matrix displayed on.
         """
 
         for i in range(len(self.mat)):
@@ -66,9 +66,9 @@ class Matrix:
         """
         Changes the color of the button you are hovering on when clicked.
 
-        #### Args:
-        - `mouseEvents`: a dictionary containing every mouse event.
-        - `color`: the color that the button will be changed to.
+        Args:
+            mouseEvents: a dictionary containing every mouse event.
+            color: the color that the button will be changed to.
         
         """
 
@@ -80,8 +80,8 @@ class Matrix:
         """
         Changes the brightness parameter.
 
-        #### Args:
-        - `newBrightness`: the new brightness value.
+        Args:
+            newBrightness: the new brightness value.
         """
 
 
@@ -97,10 +97,10 @@ class Matrix:
         """
         Updates the button color at a given position.
 
-        #### Args:
-        - `x`: the x position on the matrix.
-        - `y`: the y position on the matrix.
-        - `color`: the color that will replace the old one.
+        Args:
+            x: the x position on the matrix.
+            y: the y position on the matrix.
+            color: the color that will replace the old one.
 
         """
 
@@ -113,9 +113,12 @@ class Matrix:
         """
         Keeps track of the buttons changed on the matrix and changes them.
 
-
-        Dict is formatted in this way:
-        - {'idx': (`int`), 'color':`list[int]`)}
+        Returns:
+            A list of dictionaries formatted like this:
+            
+            - `{'idx': (int), 'color':list[int])}`, represents the changed pixel in the matrix.
+            - idx: the index where the pixel changed, represented like if the matrix was a plain list.
+            - color: the color that the pixel will assume after the change.
         """
 
 
@@ -136,8 +139,8 @@ class Matrix:
         """
         Sets the matrix's border radii to a given value.
 
-        #### Args:
-        - `borderRadius`: the value that the border radii will be set to.
+        Args:
+            borderRadius: the value that the border radii will be set to.
         """
 
         self.mat[-1][0].set_corners({'topleft':0, 'topright':borderRadius, 'bottomleft':0, 'bottomright':0})

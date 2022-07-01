@@ -8,49 +8,39 @@ EMOJI_REP = u'\ufffd'
 class TextMatrix(Matrix):
     
     """
-    ### TextMatrix
 
-    A type of `Matrix` which is used to display text, it can also display images behind said text.
+    A type of Matrix which is used to display text, it can also display images behind said text.
 
-    #### Attributes:
+    Attributes:
 
-    - `pos`: (`tuple`) the top left corner of the matrix.
-    - `buttonSize`: (`tuple`) the size of the buttons.
-    - `size`: (`int`) the size in pixels of the matrix.
-    - `mat`: (`list[list[Button]]`) a list containing buttons that represents every pixel in the physical matrix.
-    - `brightness`: (`int`) the brightness that has to be sent to the physical matrix.
-    - `changed`: (`list[dict]`) the pixel changed from the last frame sent to the arduino.
-    - `font`: (`dict`) a dictionary containing the alphabet + some character like '/', '\\', '?", [...] and also some self-made emojis in the 'emoji'dict.
-    - `emojis`: (`list[str]`) a list of special characters that are not representable with an unicode character.
-    - `text`: (`str`) a parsed string containing only the characters in the set provided in `font`.
-    - `matrixText`: (`list[list[int]]`) a list representation of the parsed text.
-    - `nextFrame`: (`list[list[Button]]`) a matrix containing the next frame that will be displayed and then swapped if different from the current frame contained in `mat`.
-    - `bgMat`: (`list[list[Button]]`) a matrix used to represent the background of the image, which will not affect the text.
-    - `scrollCounter`:  (`int`) a variable that increments every frame, once it reaches 1, the `scroll` variable will get updated
-    - `scroll`: (`int`) represents how much the text has been shifted.
+        pos: (tuple) the top left corner of the matrix.
+        buttonSize: (tuple) the size of the buttons.
+        size: (int) the size in pixels of the matrix.
+        mat: (list[list[Button]]) a list containing buttons that represents every pixel in the physical matrix.
+        brightness: (int) the brightness that has to be sent to the physical matrix.
+        changed: (list[dict]) the pixel changed from the last frame sent to the arduino.
+        font: (dict) a dictionary containing the alphabet + some character like '/', '\\', '?", [...] and also some self-made emojis in the 'emoji'dict.
+        emojis: (list[str]) a list of special characters that are not representable with an unicode character.
+        text: (str) a parsed string containing only the characters in the set provided in font.
+        matrixText: (list[list[int]]) a list representation of the parsed text.
+        nextFrame: (list[list[Button]]) a matrix containing the next frame that will be displayed and then swapped if different from the current frame contained in mat.
+        bgMat: (list[list[Button]]) a matrix used to represent the background of the image, which will not affect the text.
+        scrollCounter:  (int) a variable that increments every frame, once it reaches 1, the scroll variable will get updated
+        scroll: (int) represents how much the text has been shifted.
 
-    #### Args:
+    Usable emoji list:
 
-    - `pos`: the top left corner of the matrix.
-    - `buttonSize`: the size of the buttons.
-    - `rect`: the general dimensions of the matrix, if assigned, pos and buttonSize will be ignored and the respective attributes will be calculated based on the rect's attributes.
-    - `size`: the size in pixels of the matrix.
-    - `text`: the text that will be rendered on the matrix.
-    - `fontPath`: the path where the font for the matrix is stored.
-
-    #### Usable emoji list:
-
-    - `*sus*`: a face that shows perplexity over something.
-    - `*amogus*`: a pixelated version of the amongus character.
-    - `*dead*`: a skeleton.
-    - `*cat*`: a cat.
-    - `*:)*` the classic smiley face.
-    - `*>:(*` the classic not-so-smiley face.
-    - `*:(*` me writing docs, also some people can recognise this as a sad face.
-    - `*^_^*` very happy face.
-    - `*-_-*` bored face.
-    - `*<3*` a little heart.
-    
+        *sus*: a face that shows perplexity over something.
+        *amogus*: a pixelated version of the amongus character.
+        *dead*: a skeleton.
+        *cat*: a cat.
+        *:)*: the classic smiley face.
+        *>:(*: the classic not-so-smiley face.
+        *:(*: me writing docs, also some people can recognise this as a sad face.
+        *^_^*: very happy face.
+        *-_-*: bored face.
+        *<3*: a little heart.
+        
     """
 
 
@@ -58,6 +48,18 @@ class TextMatrix(Matrix):
     def __init__(self,pos:tuple = (0,0),buttonSize:tuple = (1,1),rect:pygame.Rect = None, size:int = 8, text:str = "Hello World!", fontPath:str = "py\\fonts\\MatrixFonts\\8_bit_font.json") -> None:
         super().__init__(pos, buttonSize, rect, size)
         
+        """
+        Args:
+
+            pos: the top left corner of the matrix.
+            buttonSize: the size of the buttons.
+            rect: the general dimensions of the matrix, if assigned, pos and buttonSize will be ignored and the respective attributes will be calculated based on the rect's attributes.
+            size: the size in pixels of the matrix.
+            text: the text that will be rendered on the matrix.
+            fontPath: the path where the font for the matrix is stored.
+        """
+
+
         self.emojis = []
         with open(fontPath, 'r') as j:
             self.font:dict = json.load(j)
@@ -75,10 +77,13 @@ class TextMatrix(Matrix):
     def __parseText(self, txt:str) -> str:
 
         """
-        Parses a given string containing only characters that are in `font`.
+        Parses a given string containing only characters that are in font.
 
-        #### Args:
-        - `txt`: the string that has to be parsed. 
+        Args:
+            txt: the string that has to be parsed. 
+
+        Returns:
+            The text that will contain only the characters in font.
         
         """
 
@@ -112,10 +117,13 @@ class TextMatrix(Matrix):
         """
         Transforms a parsed string into text, taking also in account letter spacing.
 
-        #### Args:
-        - `txt`: parsed string.
-        - `letterSpacing`: the amount of space from one letter to another.
-        
+        Args:
+            txt: parsed string.
+            letterSpacing: the amount of space from one letter to another.
+
+        Returns:
+            A matrix containing 0s and 1s to represent the given string.
+            
         """
         
 
@@ -158,10 +166,10 @@ class TextMatrix(Matrix):
         """
         Displays the text based on the arguments passed.
 
-        #### Args:
-        - `canScroll`: determines if the text will scroll.
-        - `scrollSpeed`: the speed at which the text will scroll.
-        - `newColor`: the color which the text will render with.
+        Args:
+            canScroll: determines if the text will scroll.
+            scrollSpeed: the speed at which the text will scroll.
+            newColor: the color which the text will render with.
         
         """
         
@@ -187,9 +195,9 @@ class TextMatrix(Matrix):
         """
         Updates the background matrix.
 
-        #### Args:
-        - `mouseEvents`: a dictionary containing every mouse event.
-        - `color`: the color that the button will be changed to.
+        Args:
+            mouseEvents: a dictionary containing every mouse event.
+            color: the color that the button will be changed to.
         
         """
         for i in range(len(self.mat)):
@@ -205,10 +213,10 @@ class TextMatrix(Matrix):
         """
         Updates the button color at a given position on the background matrix.
 
-        #### Args:
-        - `x`: the x position on the background matrix.
-        - `y`: the y position on the background matrix.
-        - `color`: the color that will replace the old one.
+        Args:
+            x: the x position on the background matrix.
+            y: the y position on the background matrix.
+            color: the color that will replace the old one.
 
         """
 

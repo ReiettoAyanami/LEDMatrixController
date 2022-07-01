@@ -8,35 +8,38 @@ class SerialData:
     
 
     """
-    ### SerialData
-    Transfers data to the arduino through the COM port using a `serial.Serial` object.
+    Transfers data to the arduino through the COM port using a serial.Serial object.
 
-    #### Attributes 
-    - `ser`: (`serial.Serial`) transfers data to the arduino.
-    - `comData`: (`str`) data sent to the arduino to ensure stable connection.
-    - [`inConnectionStarted`, `outConnectionStarted`]: (`bool`) determines if in/out connection are started.
-    - [`inConnectionStable`, `outConnectionStable`]: (`bool`) determines if in/out connection are stable.
-    - `connectionStable`: (`bool`) determines if both in & out connection are stable
-    - `IN_CONNECTION_STARTER`: (`str`) message to the program that data is coming from the arduino.
-    - `inCount`: (`int`) amount of data received from the arduino.
-    - `__inMinData`: (`int`) minimun amount of data to receive for establishing a stable connection.
-    - `OUT_CONNECTION_CONFIRM`: (`str`) message from the arduino to stop data.
-    - `inData`: (`str`) data coming from the arduino.
-    - `dataBuffer`: (`DataBuffer`) buffer of pixel to send to the arduino after the connection is stable.
-    - `windowRunning`: (`bool`) if the pygame window is running.
-    - `executor`: (`Thread`) a thread to continuosly send data to the arduino without interfering with the pygame window.
-    - 
+    Attributes:
+        ser: (serial.Serial) transfers data to the arduino.
+        comData: (str) data sent to the arduino to ensure stable connection.
+        inConnectionStarted: (bool) determines if in connection is started.
+        outConnectionStarted: (bool) determines if out connection is started.
+        inConnectionStable: (bool) determines if in connection is stable.
+        outConnectionStable: (bool) determines if out connection is stable.
+        connectionStable: (bool) determines if both in & out connection are stable
+        IN_CONNECTION_STARTER: (str) message to the program that data is coming from the arduino.
+        inCount: (int) amount of data received from the arduino.
+        __inMinData: (int) minimun amount of data to receive for establishing a stable connection.
+        OUT_CONNECTION_CONFIRM: (str) message from the arduino to stop data.
+        inData: (str) data coming from the arduino.
+        dataBuffer: (DataBuffer) buffer of pixel to send to the arduino after the connection is stable.
+        windowRunning: (bool) if the pygame window is running.
+        executor: (Thread) a thread to continuosly send data to the arduino without interfering with the pygame window.
     
-    ### Args
-    - `ser`: object to send / receive data from the arduino.
-    - `comData`: string to send to the arduino.
-    - `inMinData`: the minimun amount of data to be sure that the connection is stable.
-
     """
 
 
     def __init__(self, ser:serial.Serial, comData = "17\n", inMinData = 50) -> None:
         
+        """
+        Args:
+            ser: object to send / receive data from the arduino.
+            comData: string to send to the arduino.
+            inMinData: the minimun amount of data to be sure that the connection is stable.
+        """
+
+
         self.ser = ser
         self.comData = comData
         
@@ -69,10 +72,6 @@ class SerialData:
 
         """
         Starts the in/out connection with the arduino.
-        Sets:
-        - `inConnectionStable` to true if the minimun quantity of incoming data has been transferred from the arduino to the program.
-        - `outConnectionStable` to true if the arduino received the minimun quantity of data.
-        - `connectionStable` to true if both of the above are set to True.
 
         """
 
@@ -106,7 +105,7 @@ class SerialData:
     def sendData(self) -> None:
         
         """
-        Sends the first element of `dataBuffer` and then deletes it from the buffer.
+        Sends the first element of dataBuffer and then deletes it from the buffer.
         
         """
 

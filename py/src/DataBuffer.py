@@ -9,22 +9,22 @@ class DataBuffer:
 
 
     """
-    ### DataBuffer
 
     A class which contains a buffer of colors that has to be sent to the Arduino.
 
-    #### Attributes:
-    - `buffer`: (`list`) the buffer itself
-
-    #### Args:
-    - `startBuff`: a list containg dictionaries containing an 'idx' and a 'color' property.
-
+    Attributes:
+        buffer: (list) the buffer itself
 
     """
 
     
     def __init__(self, startBuff:list[dict]) -> None:
         
+        """
+        Args:
+            startBuff: a list containg dictionaries containing an 'idx' and a 'color' property.
+        """
+
         self.buffer = []
         for d in startBuff:
             self.buffer.append([d['idx'], d['color'][0], d['color'][1], d['color'][2]])
@@ -35,8 +35,8 @@ class DataBuffer:
         """
         Adds data to the buffer.
 
-        #### Args:
-        - `newData`: a list of dictionaries formatted exactly like the buffer for initialize the class.
+        Args:
+            newData: a list of dictionaries formatted exactly like the buffer for initialize the class.
                 
         """
 
@@ -57,17 +57,20 @@ class DataBuffer:
         """
         Encodes a buffer's element at a given index in the following format:
 
-        '.iiirrrgggbbb\\n'
+        Args:
+            idx : the index of the element you want to encode.
 
-        . -> start reading data;
-        iii -> index: 001;
-        rrr -> red color: 020;
-        ggg -> green color: 100;
-        bbb -> blue color: 069;
-        \\n -> stop reading data.
+        Returns:
+            A string which is formatted like this:
+            
+            - .iiirrrgggbbb\\n -> the format.
+            - . -> start reading data;
+            - iii -> index: 001;
+            - rrr -> red color: 020;
+            - ggg -> green color: 100;
+            - bbb -> blue color: 069;
+            - \\n -> stop reading data.
 
-        #### Args:
-        - `idx` : the index of the element you want to encode.
 
         """
 

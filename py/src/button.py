@@ -6,23 +6,29 @@ from src.utils import *
 class Button():
     
     """
-    ### Button
-
     A clickable object.
 
-    #### Attributes:
-        - `rect`: (`pygame.Rect`)
-        - `color`: (`tuple` | `list`)
-        - `outline_color`: (`tuple` | `list`)
-        - `outline_thickness`: (`int` )
-        - `can_be_clicked`: (`bool`)
-        - `corners`: (`dict`)
+    Attributes:
+        rect: (pygame.Rect)
+        color: (tuple | list)
+        outline_color: (tuple | list)
+        outline_thickness: (int)
+        can_be_clicked: (bool)
+        corners: (dict)
  
     """
 
     def __init__(self, rect:pygame.Rect or list[int,int,int,int], color:tuple[int,int,int,int] = (100,100,100,255), outline_color:tuple[int,int,int,int] = (255,255,255,255), outline_thickness = 1, corners = {'topleft':0, 'topright':0, 'bottomleft':0, 'bottomright':0}) -> None:
         
-
+        """
+        Args:
+            rect: The dimensions and position of the button.
+            color: The color of the button.
+            outline_color: The color of the outline of the button.
+            outline_thickness: The thickness of the outline.
+            corners: the corner radiuses of each corner.
+        
+        """
         
         self.rect = pygame.Rect(rect)
         self.color = color
@@ -37,8 +43,8 @@ class Button():
         """
         Shows the button on the given surface.
 
-        #### Args:
-        - `surface`: The surface where you want to draw the button on.
+        Args:
+            surface: The surface where you want to draw the button on.
 
         """
 
@@ -63,8 +69,8 @@ class Button():
         """
         Set the corner radius to a given integer.
 
-        #### Args:
-        - `new_corner_radius`: The new corner radius.
+        Args:
+            new_corner_radius: The new corner radius.
 
         """
 
@@ -77,9 +83,9 @@ class Button():
         
         Draws another square on top of the button.
 
-        #### Args:
-        - `surface`: The surface where you want to draw the glow on.
-        - `color`: The color you want the glow to be.
+        Args:
+            surface: The surface where you want to draw the glow on.
+            color: The color you want the glow to be.
 
         """
 
@@ -98,15 +104,17 @@ class Button():
 
 
 
-    def on_event(self, event:bool, func = None):
+    def on_event(self, event:bool, func = None) -> None:
         
         """
         Executes a given function when a certain boolean condition is statisfied.
 
-        #### Args:
-        - `event`: the boolean condition that has to be set to True in order to execute the function.
-        - `function`: the function that will be executed.
+        Args:
+            event: the boolean condition that has to be set to True in order to execute the function.
+            function: the function that will be executed.
 
+        Returns:
+            The value that the given function returns, but generally None.
         """
 
         if event and (func is not None):
