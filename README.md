@@ -3,7 +3,7 @@
 A simple application built in python to control an 8*8 LED matrix.
 
 ## Documentation:
-https://reiettoayanami.github.io/MatrixDocs/
+https://github.lenzi.dev/MatrixDocs
 
 
 ## Specs:
@@ -35,6 +35,7 @@ Pygame Version: 2.1.0
 - [ ] Some refactoring -> expandability 
 - [ ] Fixing frame speed(Synchronizing Arduino & Python)
 - [ ] Fixing brightness
+- [x] Text History
 - [ ] Removing Herobrine
 
 ## Special thanks
