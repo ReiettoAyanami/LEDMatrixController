@@ -35,6 +35,7 @@ Pygame Version: 2.1.0
 - [ ] Some refactoring -> expandability 
 - [ ] Fixing frame speed(Synchronizing Arduino & Python)
 - [ ] Fixing brightness
+- [x] Text History
 - [ ] Removing Herobrine
 
 ## Special thanks
