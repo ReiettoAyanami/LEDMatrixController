@@ -41,7 +41,7 @@ clock = pygame.time.Clock()
 
 
 """
-The script right under this comment searches for the arduino by looking at the the COM name.
+The script right under this comment searches for the arduino by looking at the the COM description.
 
 """
 
