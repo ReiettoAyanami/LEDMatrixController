@@ -1,0 +1,11 @@
+{
+
+    "MAX_BUFFER_SIZE": 64,
+    "ARDUINO_NAME" : "USB-SERIAL CH340",
+    "WINDOW_SIZE": [1280,720],
+    "CAPTION": "Led Matrix Controller",
+    "LATEST_TEXT_LIST_PATH": "py/text_list.txt",
+    "DEFAULT_BAUD_RATE" : 9600,
+    "MAX_LATEST_LEN": 10
+
+}

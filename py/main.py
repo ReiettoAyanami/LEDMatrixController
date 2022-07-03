@@ -1,9 +1,11 @@
 import json
+import tkinter
 import pygame
 from pygame import Rect
 import pygame_gui
 import serial
 import sys
+from tkinter import messagebox
 from src.SerialData import SerialData
 from threading import *
 from tkinter import colorchooser
@@ -11,25 +13,38 @@ from pygame_gui.core import ObjectID
 from src.TextMatrix import TextMatrix
 import serial.tools.list_ports
 
-constants = {}
 
-with open('py/constants.json', 'r') as j:
+"""
+Initializing constants.
+
+"""
+config = {}
+
+with open('py/config.json', 'r') as j:
     
-    constants = json.load(j)
+    config = json.load(j)
 
-MAX_BUFFER_SIZE = constants['MAX_BUFFER_SIZE']
-ARDUINO_NAME = constants['ARDUINO_NAME']
+MAX_BUFFER_SIZE = config['MAX_BUFFER_SIZE']
+ARDUINO_NAME = config['ARDUINO_NAME']
 
 
 
 pygame.init()
 pygame.font.init()
-WINDOW_SIZE = W_WIDTH, W_HEIGHT = constants["WINDOW_SIZE"]
+WINDOW_SIZE = W_WIDTH, W_HEIGHT = config["WINDOW_SIZE"]
 window = pygame.display.set_mode(WINDOW_SIZE)
-pygame.display.set_caption(constants['CAPTION'])
+pygame.display.set_caption(config['CAPTION'])
 w_running = True
 manager = pygame_gui.UIManager(WINDOW_SIZE, theme_path='py/theme.json')
 clock = pygame.time.Clock()
+
+
+
+
+"""
+The script right under this comment searches for the arduino by looking at the the COM name.
+
+"""
 
 availableComs = serial.tools.list_ports.comports()
 arduinoPort = ''
@@ -38,28 +53,29 @@ for com in availableComs:
 
     if com.description.find(ARDUINO_NAME) > -1:
         arduinoPort = com.name
+        
 
 if arduinoPort == '':
-    raise Exception('No arduino connected to com ports.')
+    messagebox.showerror("COM Error", "No arduino connected to COM Port.\nIf you are sure your arduino is connected then change the property \"ARDUINO_NAME\" in config.json")
+    sys.exit()
 
-    
-
-
-
-ser = serial.Serial(arduinoPort, 9600)
+ser = serial.Serial(arduinoPort, config["DEFAULT_BAUD_RATE"])
 serialCom = SerialData(ser)
 
 
 
-matrixBoard = TextMatrix(rect = (W_WIDTH - W_HEIGHT,0,W_HEIGHT, W_HEIGHT), text='*amogus* ')
+matrixBoard = TextMatrix(rect = (W_WIDTH - W_HEIGHT,0,W_HEIGHT, W_HEIGHT), text=' ')
 matrixBoard.setBorderRadius(20)
 colorButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(0,0,100,20), text="Colore", manager=manager, tool_tip_text="<b>Scelta del colore</b><br>Farà apparire una finestrà che permetterà la scelta del colore con cui disegnare sulla matrice.") 
 eraserButton = pygame_gui.elements.UIButton(relative_rect=Rect(0,20,100,20),text="Gomma", manager=manager, tool_tip_text="<b>Gomma</b><br>Permette di far diventare il pennello nero per far spegnere il led.")
 brightnessSlider = pygame_gui.elements.UIHorizontalSlider(pygame.Rect(100,0,200,20), 255, [0, 255], manager, object_id=ObjectID(class_id='@brightness',object_id='#brightness'))
 textChoose =  pygame_gui.elements.UITextEntryLine(pygame.Rect(0,40,150,40),manager)
-#COMChoose = pygame_gui.elements.UIDropDownMenu([ availableComs[i].name for i in range( len( availableComs ) )] , 'None', pygame.Rect(300,0,100,20), manager)
 
+latestText = pygame_gui.elements.UIDropDownMenu([], "Latest Text Used", pygame.Rect(0,80,150,30), manager)
 
+with open(config["LATEST_TEXT_LIST_PATH"], 'r') as t:
+    for line in t.readlines():
+        latestText.options_list.append(line.removesuffix("\n"))
 """
 TODO
 
@@ -156,8 +172,37 @@ def main():
 
             if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
                 if event.ui_element == textChoose:
-                    matrixBoard.setText(" " + event.text)
+
+                    if len(event.text):
+                        matrixBoard.setText(event.text)
+                        
+                        """
+                        if the length of the options in the latest text is greater than the maximum it will pop the first element in the list
+                        and add the latest text selected else it will just add the new element to the option list and write in the file.
+                        
+                        """
+
+
+                        if len(latestText.options_list) >= config["MAX_LATEST_LEN"]:
+                            latestText.options_list.pop(0)
+                            latestText.options_list.append(event.text)
+                            with open(config['LATEST_TEXT_LIST_PATH'], 'w') as l:
+                                l.writelines([latestText.options_list[i] + "\n" for i in range(len(latestText.options_list))])
+                        else:
+                            with open(config['LATEST_TEXT_LIST_PATH'], 'a') as l:
+                                l.write(event.text +  "\n")
+
+                            latestText.options_list.append(event.text)
+                    else:
+                        matrixBoard.setText(" ")
+            if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+                if event.ui_element == latestText:
+
+                    matrixBoard.setText(event.text)
                     
+                    
+
+            
 
 
 
@@ -201,29 +246,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-    
-
-
-    
-
-
-# while(True):
-    
-#     for i in range(64):
-        
-#         h = maprange((0,63), (0,1), i)
-
-
-#         r, g, b = hsv_to_rgb((h, 1, .05))
-
-#         ser.write(stringifyLEDData([i, int(r * 255), int(g * 255), int(b * 255)]))
-    
-    #print(ser.readline().decode('ascii'))
-
-        #print(stringifyLEDData([i, int(r * 255), int(g * 255), int(b * 255)]))
-
-        
-
-    
-

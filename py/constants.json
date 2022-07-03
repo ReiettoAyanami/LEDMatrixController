@@ -1,9 +1,0 @@
-{
-
-    "MAX_BUFFER_SIZE": 64,
-    "ARDUINO_NAME" : "USB-SERIAL CH340",
-    "WINDOW_SIZE": [1280,720],
-    "CAPTION": "Led Matrix Controller"
-
-
-}
