@@ -1,5 +1,4 @@
 import json
-import tkinter
 import pygame
 from pygame import Rect
 import pygame_gui
@@ -71,6 +70,7 @@ eraserButton = pygame_gui.elements.UIButton(relative_rect=Rect(0,20,100,20),text
 brightnessSlider = pygame_gui.elements.UIHorizontalSlider(pygame.Rect(100,0,200,20), 255, [0, 255], manager, object_id=ObjectID(class_id='@brightness',object_id='#brightness'))
 textChoose =  pygame_gui.elements.UITextEntryLine(pygame.Rect(0,40,150,40),manager)
 
+
 latestText = pygame_gui.elements.UIDropDownMenu([], "Latest Text Used", pygame.Rect(0,80,150,30), manager)
 
 with open(config["LATEST_TEXT_LIST_PATH"], 'r') as t:
@@ -78,7 +78,6 @@ with open(config["LATEST_TEXT_LIST_PATH"], 'r') as t:
         latestText.options_list.append(line.removesuffix("\n"))
 """
 TODO
-
 
 - Fare un sistema decende di GUI -> in pausa
 - Animazioni
@@ -102,7 +101,7 @@ def main():
     gColor = [0,0,0]
     mouse_pressed = {'left' : False, 'right':False, 'wheel': False}
 
-
+    
     serialCom.executor.start()
     
     while(w_running):
@@ -172,7 +171,7 @@ def main():
 
             if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
                 if event.ui_element == textChoose:
-
+                    
                     if len(event.text):
                         matrixBoard.setText(event.text)
                         
@@ -223,22 +222,20 @@ def main():
                 matrixBoard.displayText(True,.1,(100,0,120))
                 changes = matrixBoard.getMatrixChanges()
                 serialCom.dataBuffer.addData(changes)
-
+       
+            
         
     
         window.fill((0,0,0))
 
         matrixBoard.show(window)
         manager.draw_ui(window)
-       
+        
     
         pygame.display.update()
 
         
         
-    
-    
-
     
     
 

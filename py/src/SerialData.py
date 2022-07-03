@@ -1,7 +1,9 @@
+import sys
+from tkinter import messagebox
 import serial
 from src.DataBuffer import DataBuffer
 from threading import Thread
-
+from serial import SerialTimeoutException, SerialException
 
 
 class SerialData:
@@ -50,6 +52,7 @@ class SerialData:
         
         self.IN_CONNECTION_STARTER = b'\x11'
         self.OUT_CONNECTION_CONFIRM = b'\x12'
+        
 
         self.inConnectionStarted = False
         self.inConnectionStable = False
@@ -109,10 +112,16 @@ class SerialData:
         
         """
 
+        try:
+            if self.dataBuffer.buffer:
+                self.ser.write(self.dataBuffer.toEncodedStringAt(0))
+                self.dataBuffer.buffer.pop(0)
+        except SerialTimeoutException or SerialException:
+            messagebox.showerror("Connection Error", "Your arduino has been disconnected.\n Connect it back and restart the application.")
+            self.connectionStable = False
+            self.windowRunning = False
 
-        if self.dataBuffer.buffer:
-            self.ser.write(self.dataBuffer.toEncodedStringAt(0))
-            self.dataBuffer.buffer.pop(0)
+            sys.exit()
 
     
     def communicate(self) -> None:
@@ -126,9 +135,9 @@ class SerialData:
             self.startConnection()
 
         while self.connectionStable and self.windowRunning:
-
-            self.sendData()
             
+            self.sendData()
+
 
 
     

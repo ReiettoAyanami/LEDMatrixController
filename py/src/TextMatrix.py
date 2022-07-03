@@ -221,7 +221,7 @@ class TextMatrix(Matrix):
         """
 
         self.bgMat[x][y].color = color
-
+    
     def setText(self, newText:str) -> None:
 
         """
@@ -231,7 +231,6 @@ class TextMatrix(Matrix):
             newText: the text that will replace the old one.
             
         """
-
         self.emojis.clear()
         self.text = self.__parseText(newText)
         self.matrixText = self.__textToMatrix(self.text)

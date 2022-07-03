@@ -83,8 +83,7 @@ class Matrix:
         Args:
             newBrightness: the new brightness value.
         """
-
-
+        
         self.brightness = newBrightness
 
 
