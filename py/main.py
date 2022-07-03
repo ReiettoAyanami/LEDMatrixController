@@ -72,10 +72,14 @@ textChoose =  pygame_gui.elements.UITextEntryLine(pygame.Rect(0,40,150,40),manag
 
 
 latestText = pygame_gui.elements.UIDropDownMenu([], "Latest Text Used", pygame.Rect(0,80,150,30), manager)
+try:
+    with open(config["LATEST_TEXT_LIST_PATH"], 'r') as t:
+        for line in t.readlines():
+            latestText.options_list.append(line.removesuffix("\n"))
+except FileNotFoundError:
+    open(config["LATEST_TEXT_LIST_PATH"], 'w').close()
 
-with open(config["LATEST_TEXT_LIST_PATH"], 'r') as t:
-    for line in t.readlines():
-        latestText.options_list.append(line.removesuffix("\n"))
+
 """
 TODO
 
