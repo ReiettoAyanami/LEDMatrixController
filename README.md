@@ -3,7 +3,7 @@
 A simple application built in python to control an 8*8 LED matrix.
 
 ## Documentation:
-https://reiettoayanami.github.io/MatrixDocs/
+https://github.lenzi.dev/MatrixDocs
 
 
 ## Specs:
