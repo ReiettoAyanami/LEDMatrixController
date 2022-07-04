@@ -17,6 +17,7 @@ class Matrix:
         mat: (list[list[Button]]) a list containing buttons that represents every pixel in the physical matrix.
         brightness: (int) the brightness that has to be sent to the physical matrix.
         changed: (list[dict]) the pixel changed from the last frame sent to the arduino.
+        brightnessChanged: (list[dict]) the list of pixel that the brightness change changed.
         nextFrame: (list[list[Button]]) a matrix containing the next frame that will be displayed and then swapped if different from the current frame contained in mat.
 
     """
@@ -42,6 +43,7 @@ class Matrix:
 
         self.size = size
         self.changed = []
+        self.brightnessChanged = []
         self.nextFrame = [[Button((self.x + (self.buttonW * i), self.y + (self.buttonH * j), self.buttonW, self.buttonH), color=[0,0,0]) for j in range(self.size)]for i in range(self.size)]
         self.mat = [[Button((self.x + (self.buttonW * i), self.y + (self.buttonH * j), self.buttonW, self.buttonH), color=[0,0,0]) for j in range(self.size)]for i in range(self.size)]
         self.brightness = 255
@@ -84,10 +86,14 @@ class Matrix:
             newBrightness: the new brightness value.
         """
         
+        self.brightnessChanged = []
+        
+        if self.brightness != newBrightness:
+            for i in range(len(self.mat)):
+                for j in range(len(self.mat[i])):
+                    if self.mat[i][j].color != [int(self.mat[i][j].color[k] * newBrightness/255) for k in range(3)]:
+                        self.brightnessChanged.append({"idx":((j * self.size )+ i),"color": [int(self.mat[i][j].color[k] * newBrightness/255) for k in range(3)]})
         self.brightness = newBrightness
-
-
-
         
     
 
@@ -122,6 +128,8 @@ class Matrix:
 
 
         self.changed = []
+        self.changed += self.brightnessChanged
+    
 
         for i in range(len(self.mat)):
             for j in range(len(self.mat[i])):

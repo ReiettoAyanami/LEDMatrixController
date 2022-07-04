@@ -1,0 +1,7 @@
+{
+
+    
+    "COM_ERROR": "No arduino connected to COM Port.\nIf you are sure your arduino is connected then change the property \"ARDUINO_NAME\" in config.json",
+    "CONNECTION_ERROR": "Your arduino has been disconnected.\n Connect it back and restart the application."
+
+}
