@@ -44,7 +44,7 @@ If you want to change the pin, just go in the arduino sketch and change values.
 - [ ] Better GUI System
 - [ ] Some refactoring -> expandability 
 - [ ] Fixing frame speed(Synchronizing Arduino & Python)
-- [x] Fixing brightness -> still in progress: glitching effects & buffer slow down.
+- [x] Fixing brightness -> still in progress: buffer slow down.
 - [x] Text History
 - [ ] Removing Herobrine
 
