@@ -34,7 +34,7 @@ If you want to change the pin, just go in the arduino sketch and change values.
 
 ## Demonstration:
 
-[![WORKING APP](https://i.ytimg.com/an_webp/wqejpU3aGb0/mqdefault_6s.webp?du=3000&sqp=CJ_BkpYG&rs=AOn4CLAIqQwrZ33uXqpA2OOlD-pVODyWkg)](https://www.youtube.com/watch?v=wqejpU3aGb0)
+[![WORKING APP](https://img.youtube.com/vi/wqejpU3aGb0/maxresdefault.jpg)](https://www.youtube.com/watch?v=wqejpU3aGb0)
 
 ## TODO
 
