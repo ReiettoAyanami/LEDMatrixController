@@ -2,5 +2,5 @@ import json
 
 errors:dict = {}
 
-with open('py/configs/errors.json', 'r') as j:
+with open('configs/errors.json', 'r') as j:
     errors = json.load(j)

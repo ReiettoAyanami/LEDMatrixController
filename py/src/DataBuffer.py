@@ -1,3 +1,5 @@
+from src.ColorData import *
+
 COLOR_BLACK = [0,0,0]
 COLOR_WHITE = [255,255,255]
 COLOR_RED = [255,0,0]
@@ -18,86 +20,48 @@ class DataBuffer:
     """
 
     
-    def __init__(self, startBuff:list[dict]) -> None:
+    def __init__(self, startBuff:list[ColorData]) -> None:
         
         """
         Args:
-            startBuff: a list containg dictionaries containing an 'idx' and a 'color' property.
+            startBuff: a list containg ColorData objects.
         """
 
-        self.buffer = []
-        for d in startBuff:
-            self.buffer.append([d['idx'], d['color'][0], d['color'][1], d['color'][2]])
+        self.__buffer = startBuff
     
     
-    def addData(self,newData:list[dict]) -> None:
+    def addData(self,newData:list[ColorData]) -> None:
         
         """
         Adds data to the buffer.
 
         Args:
-            newData: a list of dictionaries formatted exactly like the buffer for initialize the class.
+            newData: a list of ColorData objects.
                 
         """
 
         for d in newData:
-            self.buffer.append([d['idx'], d['color'][0], d['color'][1], d['color'][2]])
+            self.__buffer.append(d)
 
-    def clear(self):
+    def clear(self) -> None:
 
         """
         Clears the buffer.
 
         """
                 
-        self.buffer = []
+        self.__buffer = []
 
-    def toEncodedStringAt(self,idx:int) -> str:
+    def pop(self, idx:int) -> None:
 
-        """
-        Encodes a buffer's element at a given index in the following format:
-
-        Args:
-            idx : the index of the element you want to encode.
-
-        Returns:
-            A string which is formatted like this:
-            
-            - .iiirrrgggbbb\\n -> the format.
-            - . -> start reading data;
-            - iii -> index: 001;
-            - rrr -> red color: 020;
-            - ggg -> green color: 100;
-            - bbb -> blue color: 069;
-            - \\n -> stop reading data.
+        self.__buffer.pop(idx)
 
 
-        """
+    def __len__(self) -> int:
+        return len(self.__buffer)
 
-
-        s = "."
-
-        for i in range(len(self.buffer[idx])):
-
-            d =  self.buffer[idx][i]
-            ed = 0
-
-            if d > 0:
-                while int(d / (10 ** ed)) > 0:
-                    ed +=1
-            else:
-                ed = 1
-                
-            z = 3 - ed
-            
-            
-
-            for _ in range(z):
-                s += '0'
-            s+= str(self.buffer[idx][i])
-        s += "\n"
-        
-        return s.encode()
-
-
+    def __getitem__(self, key):
+        return self.__buffer[key]
+    def __setitem__(self, key, newValue):
+        self.__buffer[key] = newValue
 

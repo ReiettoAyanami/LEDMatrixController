@@ -45,7 +45,7 @@ class TextMatrix(Matrix):
 
 
 
-    def __init__(self,pos:tuple = (0,0),buttonSize:tuple = (1,1),rect:pygame.Rect = None, size:int = 8, text:str = "Hello World!", fontPath:str = "py\\fonts\\MatrixFonts\\8_bit_font.json") -> None:
+    def __init__(self,pos:tuple = (0,0),buttonSize:tuple = (1,1),rect:pygame.Rect = None, size:int = 8, text:str = "Hello World!", fontPath:str = "fonts\\MatrixFonts\\8_bit_font.json") -> None:
         super().__init__(pos, buttonSize, rect, size)
         
         """

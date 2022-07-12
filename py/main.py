@@ -12,6 +12,7 @@ from tkinter import colorchooser
 from pygame_gui.core import ObjectID
 from src.TextMatrix import TextMatrix
 import serial.tools.list_ports
+from src.ColorData import *
 
 
 
@@ -21,13 +22,12 @@ Initializing constants.
 """
 config = {}
 
-with open('py/configs/config.json', 'r') as j:
+with open('configs/config.json', 'r') as j:
     
     config = json.load(j)
 
 MAX_BUFFER_SIZE = config['MAX_BUFFER_SIZE']
 ARDUINO_NAME = config['ARDUINO_NAME']
-
 
 
 pygame.init()
@@ -38,9 +38,6 @@ pygame.display.set_caption(config['CAPTION'])
 w_running = True
 manager = pygame_gui.UIManager(WINDOW_SIZE, theme_path=config["THEME_PATH"])
 clock = pygame.time.Clock()
-
-
-
 
 """
 The script right under this comment searches for the arduino by looking at the the COM description.
@@ -86,8 +83,7 @@ TODO
 
 - Fare un sistema decende di GUI -> in pausa
 - Animazioni
-- Salvare configurazioni.
-
+- Salvare configurazioni
 - Essenzialmente basta, penso, spero, dai, speriamo <3
 
 Fatto: 
@@ -220,7 +216,7 @@ def main():
             
             
 
-            if len(serialCom.dataBuffer.buffer) <  MAX_BUFFER_SIZE:
+            if len(serialCom.dataBuffer) <  MAX_BUFFER_SIZE:
                 matrixBoard.setBrightness(int(brightnessSlider.current_value))
                 matrixBoard.displayText(True,.1,tColor)
                 changes = matrixBoard.getMatrixChanges()

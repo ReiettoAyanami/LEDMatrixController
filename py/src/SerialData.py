@@ -117,11 +117,11 @@ class SerialData:
         """
 
 
-        if self.dataBuffer.buffer:
+        if len(self.dataBuffer):
 
             try:
-                self.ser.write(self.dataBuffer.toEncodedStringAt(0))
-                self.dataBuffer.buffer.pop(0)
+                self.ser.write(self.dataBuffer[0].toEncodedString())
+                self.dataBuffer.pop(0)
             except SerialException:
                 messagebox.showerror("Connection Error", errors["CONNECTION_ERROR"])
                 self.connectionStable = False
