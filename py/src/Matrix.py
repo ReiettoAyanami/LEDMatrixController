@@ -113,6 +113,15 @@ class Matrix:
 
         self.mat[x][y].color = color
 
+    def getMousePosition(self) -> tuple[int]:
+
+        for i in range(len(self.mat)):
+            for j in range(len(self.mat[i])):
+                if self.mat[i][j].hover():
+                    return (i, j)
+
+        return None
+
 
     def getMatrixChanges(self) -> list[ColorData]:
         

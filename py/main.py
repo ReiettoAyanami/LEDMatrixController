@@ -1,7 +1,7 @@
 import json
 import pygame
 from src.errors import errors
-from pygame import Rect
+from pygame import K_LCTRL, Rect
 import pygame_gui
 import serial
 import sys
@@ -67,7 +67,7 @@ matrixBoard.setBorderRadius(20)
 colorButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(0,0,100,20), text="Colore", manager=manager, tool_tip_text="<b>Scelta del colore</b><br>Farà apparire una finestrà che permetterà la scelta del colore con cui disegnare sulla matrice.") 
 textColorButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(0,20,100,20), text="Colore Testo", manager=manager, tool_tip_text="<b>Scelta del colore del testo</b><br>Farà apparire una finestrà che permetterà la scelta del colore con cui rappresentare il testo.") 
 eraserButton = pygame_gui.elements.UIButton(relative_rect=Rect(0,40,100,20),text="Gomma", manager=manager, tool_tip_text="<b>Gomma</b><br>Permette di far diventare il pennello nero per far spegnere il led.")
-brightnessSlider = pygame_gui.elements.UIHorizontalSlider(pygame.Rect(100,0,200,20), 255, [0, 255], manager, object_id=ObjectID(class_id='@brightness',object_id='#brightness'))
+brightnessSlider = pygame_gui.elements.UIHorizontalSlider(pygame.Rect(100,0,200,20), 50, [0, 255], manager, object_id=ObjectID(class_id='@brightness',object_id='#brightness'))
 textChoose =  pygame_gui.elements.UITextEntryLine(pygame.Rect(0,60,150,40),manager)
 latestText = pygame_gui.elements.UIDropDownMenu([], "Cronologia testi", pygame.Rect(0,100,150,30), manager)
 try:
@@ -101,11 +101,9 @@ def main():
 
     global ser
     w_running = serialCom.windowRunning = True
-    gColor = [0,0,0]
-    tColor = [0,0,0]
+    gColor = [255,255,255]
+    tColor = [255,255,255]
     mouse_pressed = {'left' : False, 'right':False, 'wheel': False}
-
-    
     serialCom.executor.start()
     
     while(w_running):
@@ -137,8 +135,6 @@ def main():
             if event.type == pygame.MOUSEMOTION:
                 mouse_moved = True
 
-            
-
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     mouse_pressed['left'] = True
@@ -162,9 +158,7 @@ def main():
 
             if event.type == pygame.MOUSEWHEEL:
                 mouse_scroll = event.y
-
-
-
+            
 
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == colorButton:
@@ -184,7 +178,6 @@ def main():
                         """
                         if the length of the options in the latest text is greater than the maximum it will pop the first element in the list
                         and add the latest text selected else it will just add the new element to the option list and write in the file.
-                        
                         """
 
 
@@ -204,13 +197,21 @@ def main():
                 if event.ui_element == latestText:
 
                     matrixBoard.setText(event.text)
-                    
+            
+           
+
             manager.process_events(event)
 
-        
+
+
 
         manager.update(time_delta)
         
+        if pygame.key.get_pressed()[K_LCTRL] and mouse_clicked['left'] and matrixBoard.getMousePosition():
+            relativePos = matrixBoard.getMousePosition()
+            gColor = matrixBoard.bgMat[relativePos[0]][relativePos[1]].color
+
+
         if serialCom.connectionStable:
             matrixBoard.bgMouseUpdate(mouse_events, gColor)
             
@@ -226,9 +227,14 @@ def main():
         
     
         window.fill((0,0,0))
+        
+        
+
 
         matrixBoard.show(window)
         manager.draw_ui(window)
+
+        
         
     
         pygame.display.update()

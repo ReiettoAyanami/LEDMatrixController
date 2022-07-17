@@ -12,7 +12,7 @@
 #define UPDATES_PER_SECOND 100
 
 CRGB leds[N_LED];
-long index = 0;
+uint32_t index = 0;
 String receivedData;
 SerialData data;
 MatrixHandler matrix(leds, N_LED);

@@ -71,7 +71,6 @@ class SerialData:
 
 
 
-
     def startConnection(self) -> None:
 
         """
