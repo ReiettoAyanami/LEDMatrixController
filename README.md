@@ -28,7 +28,7 @@ Pygame Version: 2.1.0
 ## How to setup:
 
 First take your Arduino, wire GND and 5V to the matrix, then wire the pin D5 on the arduino and wire to the DIN on the matrix.
-Then upload the skecth 'mtrx-ino.ino' on the arduino, next change the parameter 'ARDUINO_NAME' in the file config if necessary, keep in mind that the name should be corresponding to the com port description, you can check it by running the tool 'py/COM_CHECKER.py'.
+Then upload the skecth 'mtrx-ino.ino' on the arduino.
 After that, run the app, and enjoy.
 If you want to change the pin, just go in the arduino sketch and change values.
 
