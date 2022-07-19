@@ -1,3 +1,5 @@
+from ast import arg
+from glob import glob
 import json
 import pygame
 from src.errors import errors
@@ -39,6 +41,8 @@ w_running = True
 manager = pygame_gui.UIManager(WINDOW_SIZE, theme_path=config["THEME_PATH"])
 clock = pygame.time.Clock()
 
+
+#####################################################################################################################
 """
 The script right under this comment searches for the arduino by looking at the the COM description.
 
@@ -46,20 +50,45 @@ The script right under this comment searches for the arduino by looking at the t
 
 availableComs = serial.tools.list_ports.comports()
 arduinoPort = ''
+validFound = False
+serialCom = None
 
-for com in availableComs:
+def checkPort(comName:str, sCom:SerialData) -> None:
+    global validFound
+    global arduinoPort
+    global serialCom
 
-    if com.description.find(ARDUINO_NAME) > -1:
-        arduinoPort = com.name
+    while not sCom.connectionStable and not validFound:
+        sCom.startConnection()
+        if validFound:
+            break
+        validFound = sCom.connectionStable
+        arduinoPort = comName
+    if arduinoPort == comName:
         
+        
+        serials.remove(sCom)
+        for s in serials:
+            s.ser.cancel_read()
+            s.ser.cancel_write()
+
+        serialCom = sCom
+
+serials = [SerialData(serial.Serial(availableComs[i].name,config["DEFAULT_BAUD_RATE"])) for i in range(len(availableComs))]
+findingProcesses = [Thread(target=checkPort, args = [availableComs[i].name, serials[i]]) for i in range(len(availableComs))]
+
+for process in findingProcesses:
+    process.start()
+
+while not validFound:
+    pass
+
+##################################################################################################################
+
 
 if arduinoPort == '':
     messagebox.showerror("COM_ERROR", errors['COM_ERROR'])
     sys.exit()
-
-ser = serial.Serial(arduinoPort, config["DEFAULT_BAUD_RATE"])
-serialCom = SerialData(ser)
-
 
 
 matrixBoard = TextMatrix(rect = (W_WIDTH - W_HEIGHT,0,W_HEIGHT, W_HEIGHT), text=' ')
