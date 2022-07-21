@@ -39,11 +39,7 @@ If you want to change the pin, just go in the arduino sketch and change values.
 ## TODO
 
 - [x] Finishing docs
-- [ ] Animations
 - [x] COM Port detection.
-- [ ] Better GUI System
-- [ ] Some refactoring -> expandability 
-- [ ] Fixing frame speed(Synchronizing Arduino & Python)
 - [x] Fixing brightness -> still in progress: buffer slow down.
 - [x] Text History
 - [ ] Removing Herobrine
