@@ -1,4 +1,5 @@
 .vscode/
+py/__pycache__
 py/src/__pycache__/
 py/configs/text_list.txt
 py/docs

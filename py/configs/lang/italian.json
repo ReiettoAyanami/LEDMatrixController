@@ -1,0 +1,24 @@
+{
+
+    "UI":
+        {
+
+            "ERASER": "Gomma",
+            "PENCIL_COLOR": "Colore",
+            "TEXT_COLOR": "Colore testo",
+            "TEXT_HISTORY": "Cronologia Testi",
+            "LOADING_SCREEN": "Mi sto connettendo con l'arduino"
+
+        },
+
+    "UI_TOOLTIPS":
+        {
+
+            "ERASER": "<b>Gomma</b><br>Permette di far diventare il pennello nero per far spegnere il led.",
+            "PENCIL_COLOR": "<b>Scelta del colore</b><br>Fara' apparire una finestra che permettera' la scelta del colore con cui disegnare sulla matrice.",
+            "TEXT_COLOR": "<b>Scelta del colore del testo</b><br>Fara' apparire una finestra che permetterà la scelta del colore con cui rappresentare il testo."
+
+
+        }
+
+}

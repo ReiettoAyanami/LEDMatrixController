@@ -1,0 +1,23 @@
+{
+
+    "UI":
+        {
+
+            "ERASER": "Eraser",
+            "PENCIL_COLOR": "Color",
+            "TEXT_COLOR": "Text color",
+            "TEXT_HISTORY": "Text history",
+            "LOADING_SCREEN": "Connecting to the arduino"
+        },
+
+    "UI_TOOLTIPS":
+        {
+
+            "ERASER": "<b>Eraser</b><br>Sets the pencil color to black, shutting down the led.",
+            "PENCIL_COLOR": "<b>Color choose</b><br>Makes a window appear in order to choose a color to draw on the matrix.",
+            "TEXT_COLOR": "<b>Text color choose</b><br>Makes a window appera in order to choose a color to display the text with."
+
+
+        }
+
+}

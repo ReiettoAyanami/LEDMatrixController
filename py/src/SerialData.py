@@ -131,12 +131,7 @@ class SerialData:
         """
         Handles connection between arduino and the program.
 
-        """
-
-
-        while not self.connectionStable:
-            self.startConnection()
-
+        """ 
         while self.connectionStable and self.windowRunning:
             
             self.sendData()

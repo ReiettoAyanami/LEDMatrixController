@@ -1,6 +1,5 @@
 import pygame
 from pygame import gfxdraw
-from src.utils import * 
 
 
 class Button():
