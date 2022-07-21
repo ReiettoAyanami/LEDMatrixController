@@ -32,7 +32,7 @@ Then upload the skecth 'mtrx-ino.ino' on the arduino.
 After that, run the app, and enjoy.
 If you want to change the pin, just go in the arduino sketch and change values.
 
-## Demonstration:
+## Proof of concept:
 
 [![WORKING APP](https://img.youtube.com/vi/wqejpU3aGb0/maxresdefault.jpg)](https://www.youtube.com/watch?v=wqejpU3aGb0)
 
@@ -40,7 +40,7 @@ If you want to change the pin, just go in the arduino sketch and change values.
 
 - [x] Finishing docs
 - [ ] Animations
-- [x] COM Port detection -> needs speed up.
+- [x] COM Port detection.
 - [ ] Better GUI System
 - [ ] Some refactoring -> expandability 
 - [ ] Fixing frame speed(Synchronizing Arduino & Python)
