@@ -40,7 +40,7 @@ If you want to change the pin, just go in the arduino sketch and change values.
 
 - [x] Finishing docs
 - [ ] Animations
-- [x] COM Port detection
+- [x] COM Port detection -> needs speed up.
 - [ ] Better GUI System
 - [ ] Some refactoring -> expandability 
 - [ ] Fixing frame speed(Synchronizing Arduino & Python)
